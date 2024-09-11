@@ -1,0 +1,15 @@
+    1  create a server
+    2  yum install httpd
+    3  systemctl start httpd
+    4  systemctl status httpd
+    5  sudo apt update
+    6  apt update
+    7  yum update
+    8  yum install git -y
+    9  cd /var/www/html
+   10  ls
+   11 vim index.html
+   12  mv online-clone-amazon/* .
+   13  git clone https://github.com/devopsbyraham/bookmyshow.git
+   14  mv bookmyshow/* .
+   15  now open your public ip address.   
