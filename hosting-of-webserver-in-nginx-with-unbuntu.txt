@@ -1,0 +1,14 @@
+ 1. launch instance
+ 2. sudo su -
+ 3. apt-get update
+ 4. apt install nginx
+ 5. systemctl start nginx
+ 6. cd /var/www/html
+ 7. apt install git -y
+ 8. git clone https://github.com/Ironhack-Archive/online-clone-amazon.git
+ 9. mv online-clone-amazon/* .
+10. open your public ip address now
+11. systemctl stop nginx
+12. apt-get purge nginx
+13. apt-get autoremove
+14. rm -rf /etc/nginx /var/log/nginx

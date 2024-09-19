@@ -1,15 +1,15 @@
-    1  create a server
-    2  sudo su
-    3  yum install httpd
-    4  systemctl start httpd
-    5  systemctl status httpd
-    6  yum update
-    7  yum install git -y
-    8  cd /var/www/html
-    9  ls
-   10  vim index.html
-   11  git clone https://github.com/devopsbyraham/bookmyshow.git
-   12  mv bookmyshow/* .
-   13  now open your public ip address.   
-   14  systemctl stop httpd
-   15  yum remove httpd -y
+    1.  create a server
+    2.  sudo su
+    3.  yum install httpd
+    4.  systemctl start httpd
+    5.  systemctl status httpd
+    6.  yum update
+    7.  yum install git -y
+    8.  cd /var/www/html
+    9.  ls
+   10.  vim index.html
+   11.  git clone https://github.com/devopsbyraham/bookmyshow.git
+   12.  mv bookmyshow/* .
+   13.  now open your public ip address.   
+   14.  systemctl stop httpd
+   15.  yum remove httpd -y
