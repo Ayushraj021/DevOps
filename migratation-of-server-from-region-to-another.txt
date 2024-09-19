@@ -1,0 +1,14 @@
+1. create EC2
+2. create snapshot:
+   EC2 instance --> volumes --> i'd --> create snapshot 
+3. select snapshot --> actions --> copy snapshot --> select the region which you want to copy 
+4. copy snapshot
+5. open new region
+6. create volume from snapshot
+7. create instance from snapshot
+8. stop instance --> remove default volume --> attach your volume --> start instance --> open your public ip
+
+
+
+RESTORING SNAPSHOTS:
+RECYCLE BIN -- > RETENTION RULES -- > NAME: ABC -- > Resource type: EBS SNAPSHOTS -- > Apply to all resources -- > CREATE
