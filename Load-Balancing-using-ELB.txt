@@ -1,0 +1,40 @@
+#! /bin/bash
+yum install httpd -y
+systemctl start httpd
+chkconfig httpd on
+yum install git -y
+cd /var/www/html
+git clone https://github.com/Ironhack-Archive/online-clone-amazon.git
+mv online-clone-amazon/* .
+
+
+Internet-facing: internet -- > web server
+Internal: web server -- > app server
+
+STEP-1: CREATE 2 SERVERS AND RUN THE ABOVE SCRIPT
+
+
+STEP-2: CREATE LOAD BALANCER
+load balancer -- > create -- > Application Load Balancer -- > create
+Name: ______
+scheme: Internet-facing
+Load balancer IP address type: ipv4
+Network mapping: select us-east-1a & us-east-1b
+security groups: all traffic
+Listeners and routing: HTTP & 80
+Create target Group:
+targets: instances
+name: amazon-taraget-group -- > NEXT
+SELECT 2 SERVERS -- > INCLUDE AS PENDING BELOW -- > CREATE TARGET GROUP
+
+
+DNS: DOMAIN NAME SYSTEM: PORT: 53
+PURPOSE: CONVERTS IP TO HUMAN REDABLE DOMAINS
+NOTE: WE COVER THIS ON ROUTE 53 SERVICE ON AWS
+
+
+vim /etc/httpd/conf/httpd.conf
+line 47: 80=81
+systemctl restart httpd
+
+UPDATE PORTS ON LOADBALANCER AND TARGET GROUPS TOO.

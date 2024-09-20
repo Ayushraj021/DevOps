@@ -12,3 +12,6 @@
 
 RESTORING SNAPSHOTS:
 RECYCLE BIN -- > RETENTION RULES -- > NAME: ABC -- > Resource type: EBS SNAPSHOTS -- > Apply to all resources -- > CREATE
+
+note:
+we can also do migratation with the use of AMI. And there are 6-7 ways of migratation of servers.
