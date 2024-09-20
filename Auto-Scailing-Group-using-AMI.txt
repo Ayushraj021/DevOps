@@ -1,0 +1,33 @@
+#! /bin/bash
+yum install httpd -y
+systemctl start httpd
+chkconfig httpd on
+yum install git -y
+cd /var/www/html
+git clone https://github.com/Ironhack-Archive/online-clone-amazon.git
+mv online-clone-amazon/* .
+
+
+
+
+
+STEP-1: CREATING AMI USING THE ABOVE AMAZON SCRIPT
+STEP-2: CREATE AUTO SCALING GROUP
+
+Auto Scaling group name: _________
+Create new launch template: Give your ami and rest of configuration
+NETWORK: Select Azs -- > next
+Load balancer: Attach to a new load balancer -- > internet facing
+select new target group -- > next
+Specify: desired: 1, min:1, max:3  
+
+Target tracking scaling policy:
+metrics type: Averrage CPU utiliazation: 20%
+
+
+COMMADS TO GIVE LOAD:
+amazon-linux-extras install epel -y
+yum install stress -y
+stress
+
+stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 400s   ---------->Here, 400 = N, and N can be any number.
