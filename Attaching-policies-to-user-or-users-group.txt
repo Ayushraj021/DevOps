@@ -1,0 +1,4 @@
+1. Create IAM user or user(s) group 
+
+
+IAM --> policies --> create policy --> select service : s3 --> all access -- > bucket -- > arn -- > give bucket name -- > next -- > name -- > create
