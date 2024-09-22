@@ -1,0 +1,33 @@
+SYNTAX:
+CLOUD NAME    |   SERVICE NAME   | COMMAND
+
+
+
+
+Eg:
+
+
+aws s3 ls            : TO LIST BUCKETS
+aws s3 mb s3://name        : TO CREATE BUCKET
+aws s3 rb s3://name        : TO DELETE BUCKET
+aws s3 ls s3://name        : TO LIST FILES IN BUCKETS
+aws s3 cp file1 s3://name    : TO COPY FILES FROM EC2 TO S3
+aws s3 cp file1 s3://name --recursive: TO COPY FOLDERS FROM EC2 TO S3
+aws s3 sync s3://bucket1 s3://bucket2: TO COPY FILES FROM ONE BUCKET TO ANOTHER
+
+
+
+aws iam list-users
+aws iam list-groups
+aws iam list-roles
+
+aws iam create-user --user-name devops
+aws iam create-group --group-name devops
+aws iam delete-user --user-name devops
+aws iam delete-group --group-name devops
+
+
+aws ec2 run-instances --image ami-0ebfd941bbafe70c6 --instance-type t2.micro --region us-east-1
+aws ec2 stop-instances --instance-ids i-0def9b4aa083c3e8f --region us-east-1
+aws ec2 start-instances --instance-ids i-0def9b4aa083c3e8f --region us-east-1
+aws ec2 terminate-instances --instance-ids i-0def9b4aa083c3e8f --region us-east-1
