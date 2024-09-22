@@ -1,0 +1,55 @@
+Amazon S3 --> Buckets --> Create bucket --> Bucket name : it must be unique to all the region.
+ACLs disabled 
+Bucket Versioning --> Enable -------> We need to enable this beacuse if our object gets deleted we can able to access it.
+Create
+
+
+
+Note:-
+Bucket is gobally service and it can be access from any region.
+
+
+
+
+
+Uploading of files in bucket:-
+select your bucket --> upload
+click on add files.
+after uploaded click on close.
+select the file click upon open.
+
+
+
+Note:-
+Once you start uploading all the files it will uploaded but the folders will uploaded one by one only.
+You can open your object with the use of KEY URL but you are not able to open the object from the Object URL, because Object URL can be access by anyone and KEY URL is lengthy to access by anyone.
+And yes you can also provide only the required services permission. Eg:- if developer want to see only database for 10min, you will only provide to see database for 10min.
+But you can provide the KEY URL to yoiur developer if he required to see it for sometime.
+
+
+
+
+Providing the KEY URL to developer:-
+Object actions --> Share with a presigned URL --> choose for how many minutes --> create presigned URL.
+Copy presigned URL and give it to your developer.
+After time is over developer is not able to access the data.
+
+
+Note:-
+In real-time user should grant least privileages, you should not give all permissions.
+
+
+
+static web hosting-----------
+upload your code.
+properties --> Static website hosting  --> enable --> enable --> Index document: index.html --> save changes
+Now, if you open the URL you will get an error 403 which means you are blocked.
+This happens beacuse your ACLs is disabled enable it.
+Go to your bucket --> permission --> Block public access (bucket settings) --> edit --> uncheck block all public access --> confirm
+Object Ownership --> edit --> ACLs enabled --> click on I acknowledge that ACLs will be restored --> save changes
+select all object --> actions --> make public using ACL --> make public
+open your URL.
+
+
+
+You can restor your bucket after deleting it by the process called version control i.e., to enbale bucket Versioning.
