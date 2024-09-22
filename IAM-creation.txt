@@ -1,0 +1,32 @@
+-----------------------------------------------------IAM User(s) Creation:-------------------------------------------------------
+
+
+
+IAM -- > USERS -- > CREATE USER -- > NAME -- > NEXT -- >
+Attach policies directly -- >
+
+HOW TO GIVE PERMISSIONS:
+USER -- > Attach policies directly -- > S3FULL ACESS, EC2 FULL ACESS -- > SAVE
+
+
+
+
+
+-----------------------------------------------------IAM User(s) Group Creation:-------------------------------------------------------
+IAM --> Create User(s) 
+IAM --> User groups --> Create group --> Name the group --> Add users to the group --> Attach permissions policies --> Create user group
+
+
+
+-----------------------------------------------------Roles Creation:-------------------------------------------------------
+
+
+
+ROLES -- > CREATE -- > AWS SERVICE -- > Use case: EC2 -- > Attach policies directly -- > next -- > name -- > create
+
+
+ATTACHING THE ROLE TO SERVER:
+SELECT SERVER -- > ACTIONS -- > SECURITY -- > MODIFY IAM ROLE -- > UPDATE
+
+
+aws s3 ls --> It is used to check the how many s3 is present in your server. This command will run when we connect our EC2 Instance.
