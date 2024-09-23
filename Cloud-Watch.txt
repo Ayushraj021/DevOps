@@ -1,0 +1,19 @@
+1. Launch EC2 instance beacuse we are going to monitor upon EC2 only now.
+2. Open Cloud Watch.
+3. Alarms --> In alarm --> create alarm --> select metric --> EC2 --> Per-Instance metric --> search your ec2 by name and select the CPU utilization.
+   Select CPU utilization --> Select metric
+4. period --> 1minute
+5. Whenever CPUUtilization is... Define the alarm condition.
+   select Greater/Equal
+   Define the threshold value = 10 --> next
+6. Notification --> Send a notification to the following SNS topic --> Create new topic
+7. Create a new topic… --> name --> 
+8. Email endpoints that will receive the notification… --> ayushraj387@gmail.com --> create topic --> next
+9. Alarm name--> abc --> next --> create alarm
+10. you will a mail subscribe it to the notification.
+11. connect your server.
+12. provide the stress:- 
+    sudo yum install stress -y
+    stress --cpu 4 
+13. now you can monitor your ec2 and as soon as stress increses you will get an mail.
+  
