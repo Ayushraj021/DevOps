@@ -1,0 +1,46 @@
+1. Launch an EC2 instance and connect it.
+2. Install the terrraform in your EC2 instance:-
+      
+    1. apt install -y software-properties-common
+    2  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo tee /etc/apt/trusted.gpg.d/hashicorp.asc
+    3.  curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo tee /etc/apt/trusted.gpg.d/hashicorp.asc
+    4.  sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+    5.  apt update
+    6.  apt install terraform
+    7.  apt update
+    8.  apt install unzip
+    9.  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   10.  unzip awscliv2.zip
+   11.  sudo ./aws/install
+   12.  aws --version
+   13.  aws configure
+Configure your aws by creating the access key for the iam user. For that create IAM User and create Access Key.
+
+3. mkdir terraform
+4. cd terraform
+5. vim main.tf 
+
+write the following following HCL code in your file:-
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+ami = "ami-03eb6185d756497f8"
+instance_type = "t2.micro"
+}
+
+
+----------------------------------TERRAFORM COMMANDS----------------------------------
+terraform init: initialize the provider plugins on backend
+terraform plan	: to create an execution plan
+terraform apply: to create resources
+terrafrom destroy: to delete resources
+
+terraform apply --auto-approve : to create an execution plan
+terraform destroy --auto-approve : to delete resources
+
+terraform state list: used to store the resource information which is created by terraform
+single target: terraform destroy -auto-approve -target="aws_instance.one[3]"
+multi targets: terraform destroy -auto-approve -target="aws_instance.one[1]" -target="aws_instance.one[2]"
