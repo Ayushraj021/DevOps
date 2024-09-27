@@ -1,0 +1,223 @@
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+count = var.instance_count
+ami = "ami-0b41f7055516b991a"
+instance_type = var.instance_type
+}
+
+variable "instance_type" {
+description = "*"
+type = string
+default = "t2.micro"
+}
+
+variable "instance_count" {
+description = "*"
+type = number
+default = 5
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------decreasing time complexity--------------------------------------------------
+
+vim main.txt:--------
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  tags = {
+    Name = var.instance_name
+  }
+  count         = var.instance_count
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = var.instance_type
+}
+
+
+vim variable.tf:--------
+
+
+variable "instance_type" {
+  description = "*"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "instance_count" {
+  description = "*"
+  type        = number
+  default     = 5
+}
+
+variable "instance_name" {
+  description = "*"
+  type        = string
+  default     = "dev"
+}
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------TERRAFORM CLI:---------------------------------
+
+
+main.tf----------
+
+provider "aws" {
+
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  count         = var.instance_count
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = var.instance_type
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+
+variable.tf:----------
+
+variable "instance_count" {
+}
+
+variable "instance_type" {
+}
+
+
+variable "instance_name" {
+}
+
+
+
+
+
+
+
+
+--------------------------------------enviroment----------------------------------
+cat dev.tfvars
+instance_count = 1
+
+instance_type = "t2.micro"
+
+instance_name = "dev-server"
+
+cat test.tfvars
+instance_count = 2
+
+instance_type = "t2.medium"
+
+instance_name = "test-server"
+
+cat variable.tfvars
+instance_count = 3
+
+instance_type = "t2.large"
+
+instance_name = "prod-server"
+
+terraform apply -var-file="dev.tfvars"
+terraform apply -var-file="test.tfvars"
+terraform apply -var-file="variable.tfvars"
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------TERRAFORM OUTPUTS:-------------------------
+Whenever we create a resource by Terraform if you want to print any output of that resource we can use the output block this block will print the specific output as per our requirement.
+
+
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+ami = "ami-00b8917ae86a424c9"
+instance_type = "t2.micro"
+tags = {
+Name = "raham-server"
+}
+}
+
+output "raham" {
+value = [aws_instance.one.public_ip, aws_instance.one.private_ip, aws_instance.one.public_dns]
+}
+
+TO GET COMPLTE OUTPUS:
+
+output "raham" {
+value = aws_instance.one
+}
+
+
+Note: when we change output block terraform will execute only that block
+remianing blocks will not executed because there are no changes in those blocks.
+
+--------------------------------------TERRAFORM TAINT & UNTAINT:--------------------------------------------- 
+it is used to recreate specific resources in infrastructure.
+Why: 
+if i have an ec2 -- > crashed
+ec2 -- > code -- > main.tf 
+now to recreate this ec2 seperately we need to taint the resource
+
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+count = 2
+ami = "ami-00b8917ae86a424c9"
+instance_type = "t2.micro"
+tags = {
+Name = "raham-server"
+}
+}
+
+terraform state list
+terraform taint aws_instance.one[0]
+terraform apply --auto-approve 
+
+TO TAINT: terraform taint aws_instance.one
+TO UNTAINT: terraform untaint aws_instance.one
+
+TERRAFORM REPLACE:
+terraform apply --auto-approve -replace="aws_instance.one[0]"
