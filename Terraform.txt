@@ -44,3 +44,4 @@ terraform destroy --auto-approve : to delete resources
 terraform state list: used to store the resource information which is created by terraform
 single target: terraform destroy -auto-approve -target="aws_instance.one[3]"
 multi targets: terraform destroy -auto-approve -target="aws_instance.one[1]" -target="aws_instance.one[2]"
+

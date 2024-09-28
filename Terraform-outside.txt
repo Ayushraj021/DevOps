@@ -1,0 +1,64 @@
+
+import------------------------------------
+
+vim main.tf
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = "t2.large"
+  tags = {
+    Name = "Ayush"
+  }
+}
+
+import {
+  to = aws_instance.one   -------> where you want to export
+  id = instance_id        -------> what to export
+}
+
+
+terraform import aws_instance.one instance-id : to import the instance which is made from GUI.
+terraform state show aws_instance.one : for checking that ec2 has been imported or not. OR. for checking of the specific resource 
+terraform fmt: to format the documents
+terraform fmt -recursive: to format the documents of all the files
+
+
+
+--------------taint COMMANDS--------------------
+terraform state list: to recreate the instance because sometimes instances dosen't create as per our requirement
+terraform taint aws_instance.one[0]: to taint particular instance
+terraform apply --auto-approve
+
+TERRAFORM REPLACE:
+terraform apply --auto-approve -replace="aws_instance.one[0]": same as tent. tent is older version and replace is new version but both will work
+
+------------------workspace COMMANDS-----------------------
+terraform workspace list : to list the workspaces
+terraform workspace new dev : to create workspace
+terraform workspace show : to show current workspace
+terraform workspace select dev : to switch to dev workspace
+terraform workspace delete dev : to delete dev workspace
+
+
+NOTE:
+1. we need to empty the workspace before delete
+2. we cant delete current workspace, we can switch and delete
+3. we cant delete default workspace
+
+
+------------------state COMMANDS-----------------------
+terraform state list : to list the resources
+terraform state show aws_subnet.two : to show specific resource info
+terraform state mv aws_subnet.two aws_subnet.three : to rename block
+terraform state rm aws_subnet.three : to remove state information of a resource
+terraform state pull : to pull state file info from backend
+
+
+------------------debugging COMMANDS-----------------------
+export TF_LOG=TRACE
+export TF_LOG_PATH="logs.txt"
+terraform apply
