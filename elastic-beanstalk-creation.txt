@@ -1,0 +1,34 @@
+1.  open ebs
+2.  create application --> application name: abc 
+Note: once we enter the application name automatically automatically Environment name will update in Environment name.
+3. leave these domain as blank. we don’t need to enter anything here.
+4.  platform --> python
+5.  application code --> sample application
+6.  presets --> single insatnce(free tier eligible)
+7.  configure service access --> service access -->
+    Here have to select create and use new service-role, so automatically a new role will gets created in IAM and it will attach to Elastic Beanstalk.
+8.  In EC2 key-pair if you have any existing key pair you can select or you can leave it as blank.
+9.  create a role and attach it to your EC2 
+    In EC2 instance profile we have to create a IAM role with admin permissions and attach here.
+    To do that take a duplicate session search for IAM in AWS account.
+    IAM is used to provide full access to create infrastructure through elastic beanstalk.
+10.  now go back to elastic beanstalk
+11. here refresh on EC2 instance profile you will get your role and attach here and click on next.
+12. select the default VPC.
+13. select (Tick) on all availability zone
+14. Keep this database as it is we don’t need to change any configurations here --> next
+15. In this Instance we have to select General Purpose (SSD) as ROOT VOLUME (Boot device) and size should be min 10 GB. 
+16. Select any security group that you have in your account.
+NOTE: Don’t select default security group, because you cant see the output.
+17. Capacity --> make it as default, we don’t need to change anything here
+18. instance type --> t2.micro
+19. monitoring --> select basic on Health Reporting.
+20. managed platform updates --> Here deactivate the managed updates.
+21. Enter your Email ID and click on next and then review all these options and click on create application.
+    So the infrastructure will gets created here by elastic beanstalk and deploy the application on EC2 instance.
+
+    Now open your email you will get a mail from AWS, there we have click on confirm subsciption.
+    If you click on confirm subscription you will get notified by AWS on every change in application.
+
+After 3-5 Minutes your infra will gets created and you can see the logs like this.
+To access our Application we have click on domain --> click on this domain link we will get output.
