@@ -1,0 +1,131 @@
+META ARGUMENTS:
+
+PARALLELISM: by default terraform follows parallelism.
+it will execute all the resources at a time.
+by default parallelism limit is 10.
+
+DEPENDS_ON: one resource creation will be depending on other.
+this is called explicit dependency.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-046d18c147c36bef1"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "raham-server"
+  }
+}
+
+resource "aws_s3_bucket" "two" {
+  bucket     = "terraformbucketabcd123"
+  depends_on = [aws_instance.one]
+}
+
+2. COUNT: used to create similar objects.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  count         = 3
+  ami           = "ami-046d18c147c36bef1"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "dev-server-${count.index+1}"
+  }
+}
+
+NOTE: it wont create resources with different configs.
+
+3. FOR_EACH: it is a loop used to create resources.
+we can pass different configuration to same code.
+it will create resource with less code.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  for_each      = toset(["dev-server", "test-server", "prod-server"])
+  ami           = "ami-046d18c147c36bef1"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "${each.key}"
+  }
+}
+
+
+
+4. LIFECYCLE: 
+
+PREVENT DESTROY: used to prevent the resource to not be deleted.
+it is bool.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-046d18c147c36bef1"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "raham-server"
+  }
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+NOTE: CHECK WITH TERRAFORM APPLY
+
+IGNORE CHANGES:
+when user modify anything on current state manually changes will be ignored.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-046d18c147c36bef1"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "raham-server"
+  }
+  lifecycle {
+    ignore_changes = all
+  }
+}
+
+NOTE: MODIFY NAME MANUALLY AND CHECK WITH TERRAFORM APPLY
+
+CREATE BEFORE DESTROY:
+by default when we modify some properties terraform will first destroy old server and create new server later.
+
+if we follow create before destroy lifecycle the new resource will create first
+and later old resource is going to be destroyed.
+
+provider "aws" {
+  region = "ca-central-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0208b77a23d891325"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "raham-server"
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+note: 
+apply first
+secondly chnage the instance_type 
+thirdly again run the apply command 
+
+
