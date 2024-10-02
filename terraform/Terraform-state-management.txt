@@ -1,0 +1,88 @@
+launch an instance and connect.
+configure instance.
+
+create a s3 bucket.
+create a dynamo db.
+
+main.tf:- 
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+ami = "ami-03eb6185d756497f8"
+instance_type = "t2.micro"
+}
+
+
+terraform {
+    backend "s3"{
+        bucket = "provide_your_S3_bucket_name"
+        key    = "provide_loaction_where_you_want_to_store_your_state_file" ---->eg:- prod/terraform.tfstate
+        region = "your_region"
+        dynamodb_table = "provide_your_dynamo_db_name"
+
+    }
+}
+
+
+
+Note:- untill you will not launch the resource from terraform it will not show terraform.tfstate file.
+terraform.tfstate file store the description of your resource in json formate.
+for every plan, apply and destroy state file is going to be refresh.
+
+
+
+
+--------------------------MIGRATING FROM S3 TO LOCAL BACKEND--------------------
+if we want state file to back on local use below method.
+remove backend code from main.tf
+run terraform init -migrate-state
+
+
+TERRAFORM REFRESH : to refersh the state file.
+if you dont want to refresh while apply & destroy use: -
+terraform apply/destroy -refresh=false
+
+
+
+
+
+
+
+
+
+-------------------------------------Terraform Backend Block------------------
+
+mai.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0522ab6e1ddcc7055"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "Dynamo DB"
+  }
+}
+
+terraform {
+  backend "local" {
+    path = "dummy/terraform.tfstate"
+  }
+}
+
+
+
+
+------------------TERRAFORM SENSITIVE DATA-----------------------------------
+main.tf
+
+variable "first_name" {
+type = string
+sensitive = true
+default = "Terraform"
+}
+check state file it will show data.
