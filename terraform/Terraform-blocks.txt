@@ -1,0 +1,105 @@
+terraform validate : used validates the configuration files in your working directory.
+terraform plan -out myplan: used to save plan in a file for future reference.
+to apply : terraform apply myplan
+to destroy: terraform plan -destroy
+
+
+--------------------PROVIDER BLOCK-------------------------------
+
+main.tf: -
+terraform{
+    required_providers{
+        aws = {
+            source = "hashicorp/aws"
+            version = ">5.0.0"
+        }
+        google = {
+            source = "hashicorp/google"
+            version = "<4.67.0"
+        }
+   
+    }
+
+}
+
+
+
+
+-------------------terraform BLOCK-------------------------------
+main.tf: -
+terraform{
+    required_version = "<=1.7.0"
+}
+
+
+
+
+-------------------local BLOCK-------------------------------
+provider "aws"{
+    region = "ap-south-1"
+}
+
+locals {
+    env = "prod"
+}
+
+resource "aws_vpc" "one"{ 
+    cidr_block = "10.0.0.0/16"
+    tags = {
+        Name = "${local.env}-vpc"
+    }
+}
+
+resource "aws_subnet" "one"{ 
+    cidr_block = "10.0.0.0/24"
+    tags = {
+        Name = "${local.env}-subnet"
+    }
+}
+
+resource "aws_vpc" "two"{ 
+    vpc_id = aws_vpc.one.id
+    cidr_block = "10.0.0.0/16"
+    tags = {
+        Name = "${local.env}-vpc"
+    }
+}
+
+
+resource "aws_instance" "three"{ 
+    subnet_id = aws_subnet.two.id
+    ami = "your_ami_id"
+    instance_type = "t2.micro"
+    key_name = "abc"
+    tags = {
+        Name = "${local.env}-instance"
+    }
+}
+
+
+
+
+---------------------------TERRAFORM CODE COMMENTING--------------------
+# -- > single line comment
+// -- > single line comment
+/* */ -- > multi line comment
+Note: if we put comments for code, terraform thinks code is not existed and it
+will destroy the resource.
+
+
+
+
+---------------------------TLS PROVIDER--------------------
+it provides utilities for working with Transport Layer Security Keys and certificates.
+
+
+main.tf: -
+
+resource "tls_private_key" "generated"{
+    algorithm = "RSA"
+}
+
+resource "local_file" "private_key_pem"{
+    filename = tls_private_key.generated.private_key_pem
+    content = "serverprivatekey"
+    }
