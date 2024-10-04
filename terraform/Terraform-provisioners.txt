@@ -74,7 +74,7 @@ Now, you can connect to your server and check whether all the things are imnstal
 
 
 
-alia & provides ------------------------
+alias & provides ------------------------
 we can map resource blocks to particular provider blocks.
 used to create resources on different regions.
 
