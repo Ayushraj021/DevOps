@@ -1,0 +1,151 @@
+local -executes ------------------------
+executes command/script on local machine (where terraform is installed)
+it will execute the command when resource is created
+
+main.tf: -
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0dee22c13ea7a9a67"  # Check if this is Amazon Linux AMI
+  instance_type = "t2.micro"
+  key_name      = "devops"
+  tags = {
+    Name = "dev server"
+  }
+
+provisioner "local-ecxec" {
+    command = "echo hello my name is Ayush Raj "
+}
+}
+
+
+
+
+
+
+
+
+
+
+remote -executes ------------------------
+executes command/script on remote machine.
+once the server got created it will execute the commands and scripts for
+installing the softwares and configuring them and deploying app also.
+
+main.tf: -
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0dee22c13ea7a9a67"  # Check if this is Amazon Linux AMI
+  instance_type = "t2.micro"
+  key_name      = "devops"
+  tags = {
+    Name = "dev server"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install git httpd -y",
+      "touch file1"
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = "ec2-user"  # Default user for Amazon Linux
+      private_key = file("~/.ssh/id_rsa")
+      host        = self.public_ip
+    }
+  }
+}
+
+
+Note:- 
+create a file "~/.ssh/id_rsa" and paste your private key pair which is saved in your local server/desktop.
+
+Now, you can connect to your server and check whether all the things are imnstalled or not and file is made or not.
+
+
+
+
+
+
+alia & provides ------------------------
+we can map resource blocks to particular provider blocks.
+used to create resources on different regions.
+
+main.tf: -
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-0dee22c13ea7a9a67"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "Mumbai server"
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+  alias  = "n_virginia"
+}
+
+resource "aws_instance" "two" {
+  provider      = aws.n_virginia
+  ami           = "ami-0fff1b9a61dec8a5f"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "N.Virginia server"
+  }
+}
+
+
+
+
+
+data block-----------------------------------------------------
+A data block is used to read resource information that is already existed.
+Data Block will not create new resources, it fetch info from existing resources.
+it can fetch info from other workspaces also.
+
+EX:
+
+Fetching information about existing resources (e.g., AMIs, VPCs, subnets).
+Using data in other blocks (e.g., resources, outputs, or modules).
+Referencing external services or configurations without creating them.
+
+
+main.tf: -
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+
+
+#data block to fetch the latest amazon linux 
+
+data "aws_ami" "latest_amazon_linux" {
+  most_recent = true
+
+  filter {
+    name = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  owners = ["amazon"]
+}
+resource "aws_instance" "my_instance" {
+  ami           = data.aws_ami.latest_amazon_linux.id
+  instance_type = "t2.micro"
+  tags = {
+    Name = "linux server"
+  }
+}
