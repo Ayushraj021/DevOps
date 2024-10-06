@@ -1,0 +1,156 @@
+MODULES--------------------------
+it divides the code into folder structure.
+Modules are group of multiple resources that are used together.
+This makes your code easier to read and reusable across your organization.
+we can publish modules for others to use.
+each module will be having sperate plugins.
+modules plugins will be store on .terraform/modules/
+
+TYPES:------------------------
+
+Root Module: This is the main directory where Terraform commands are run.
+All Terraform configurations belong to the root module.
+Child Modules: These modules are called by other modules.
+
+
+local modules source-----------------------------------
+we have to write the code in local.
+
+
+1. apt install tree -y: we need to install tree for using the modules.
+2. mkdir modules
+3. tree : to the current modules.
+4. mkdir modules/instance
+5. mkdir modules/buckets
+6. tree
+7. vim modules/instance/main.tf: -
+
+resource "aws_instance" "one" {
+  ami           = "ami-0dee22c13ea7a9a67"
+  instance_type = "t2.micro"
+}
+
+
+8. vim modules/buckets/main.tf: - 
+
+resource "aws_instance" "one" {
+  ami           = "ami-0dee22c13ea7a9a67"
+  instance_type = "t2.micro"
+}
+
+9. vim main.tf: - 
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+module "instance" {
+  source = "./modules/instances"
+}
+
+module "bucket" {
+  source = "./modules/buckets"
+}
+
+
+
+
+remote modules -----------------------------------
+we don't need to write the code on own take it from official documentation.
+
+search terraform module for aws. just copy and paste the whichever code you want. eg for vpc code: -
+main.tf: -
+
+provider "aws"{
+    region = "ap-south-1"
+}
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "5.13.0"
+}
+
+
+Note : 
+modules plugins are going to store in ./terraform/modules/
+Sometimes module code will not work then take the code from official documentation and chnage it as per your requirements.
+
+
+
+
+
+MODULE INPUT & OUTPUTS-------------------------
+We can add Input and Output Blocks for Terraform Modules.
+Root module can refer both variables & values of child modules.
+Child modules cant refer variables, but it can refer its values.
+
+
+
+main.tf: -
+provider "aws" {
+
+  region = "ap-south-1"
+}
+
+
+module "instance" {
+
+  source = "./modules/instance"
+}
+
+output "instance_public_ip" {
+
+  value = module.instance.public_ip
+}
+
+
+
+
+
+
+vim modules/instance/main.tf: -
+
+resource "aws_instance" "web" {
+
+  ami           = var.ami_id
+  instance_type = var.instance_type
+
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+
+
+
+vim modules/instance/output.tf: -
+
+output "public_ip" {
+  value = aws_instance.web.public_ip
+
+}
+
+
+
+
+
+
+
+vim modules/instance/variable.tf: -
+
+variable "ami_id" {
+
+  default = "ami-0dee22c13ea7a9a67"
+}
+
+
+
+variable "instance_type" {
+
+  default = "t2.micro"
+}
+
+
+variable "instance_name" {
+
+  default = "modules server"
+}
