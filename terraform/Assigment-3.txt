@@ -50,12 +50,14 @@ output "instance_id" {
   value = module.ec2.instance_id
 }
 
-
-main.tf:
-
 provider "aws" {
   region = "us-east-1"  # Change to your desired region
 }
+
+
+main.tf:
+
+
 
 resource "aws_instance" "this" {
   ami           = var.ami_id
@@ -166,9 +168,7 @@ output "user_id" {
 
 main.tf:
 
-provider "aws" {
-  region = "us-east-1"  # Change to your desired region
-}
+
 
 resource "aws_iam_user" "this" {
   name = var.user_name
@@ -203,7 +203,7 @@ variable "user_name" {
 variable "create_access_key" {
   description = "Whether to create an access key for the user"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "user_policy" {
@@ -270,11 +270,9 @@ module "rds" {
  value =module.rds.db_instance_id
 }
 
-imain.tf:
+main.tf:
 
-provider "aws" {
-  region = "us-east-1"  # Change to your desired AWS region
-}
+
 
 resource "aws_db_instance" "this" {
   allocated_storage    = var.allocated_storage
@@ -424,9 +422,7 @@ output "bucket_id" {
 
 main.tf:
 
-provider "aws" {
-  region = "us-east-1"  # Change to your desired region
-}
+
 
 resource "aws_s3_bucket" "this" {
   bucket = var.bucket_name
@@ -538,9 +534,6 @@ output "vpc_id" {
 
 main.tf:
 
-provider "aws" {
-  region = "us-east-1"  # Change to your desired region
-}
 
 resource "aws_vpc" "this" {
   cidr_block = var.cidr_block

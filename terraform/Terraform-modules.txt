@@ -154,3 +154,24 @@ variable "instance_name" {
 
   default = "modules server"
 }
+
+
+
+Public Module------------------------
+The module must be on GitHub and must be a public repo.
+NAMING FORMAT: terraform-<provider>-<name> (terraform-aws-ec2-instance)
+must have a description.
+module structure will be main.tf, variables.tf, outputs.tf.
+x.y.z tags for releases.
+
+
+Note: you can also create you own modules and publish it in terraform.
+
+
+
+
+Terraform Graph----------------------------------
+The terraform graph command produces descriptions of the relationships between objects in a Terraform configuration.
+using the DOT language.
+once create infra run the command: terraform graph
+Go to Google -- > Graphwiz online & copy paste the code
