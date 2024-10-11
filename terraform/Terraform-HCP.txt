@@ -1,10 +1,37 @@
+INTRO:
+HCP means HashiCorp Cloud Platform  
+it is a managed platform to automate cloud infrastructure.
+it provide privacy, security and isloation.
+it supports multiple providers like AWS, Azure, and Google Cloud. 
+it offers a suite of open-source tools for managing infrastructure, including Terraform, Vault, Consul, and Nomad. 
+We can use Different Code Repos for a Project.
+We can use Variable sets to apply same variables to all the workspaces.
+
+MAIN PRODUCTS:
+
+Terraform: To create infrastructure
+Vault: to managing secrets and protecting sensitive data.
+Nomad: to schedule, deploy, and manage applications.
+Consul: to secure service-to-service communication and networking.
+Packer: to create images for launching servers.
+
+
+ACCOUNT CREATION
+Go to google & type : HCP CLOUD ACCOUNT SIGNIN
+USER NAME & PASSWORD
+VERIFY THE EMAIL
+CLICK ON TERRAFORM
+CONTINUE WITH HCP ACCOUNT
+CREATE A GITHUB ACCOUNT
+create repo -- > name -- > add new file -- > write terraform code -- >  commit
+
 WORKING:
 CREATE AN ORGINIZATION
 CREATE YOUR WORKSPACE
 INTEGRATE YOUR VCS  -- > GITHUB -- > SELECET REPO -- > NEXT -- > CONTINUE
 ADD VARAIBLES -- > 
-AWS_ACCESS_KEY_ID : SENSITIVE -- > SAVE 
-AWS_SECRET_ACCESS_KEY: SENSITIVE -- > SAVE 
+AWS_ACCESS_KEY_ID : Environment variable --> CLICK on it --> SENSITIVE -- > SAVE 
+AWS_SECRET_ACCESS_KEY: Environment variable --> CLICK on it --> SENSITIVE -- > SAVE 
 NOTE: MARK THEM AS ENV VARIBALE AND MAKE SURE NO SPACES ARE GIVEN
 
 RUNS -- > NEW RUN -- > START  -- > confirm and apply
@@ -12,3 +39,43 @@ IT WILL AUTOMATICALLY PLAN & WE NEED TO APPLY BY MANUAL
 SECOND TIME WHEN WE CHANGE CODE IT WILL AUTOMATICALLY PLAN  
 PLAN & APPLY
 DESTROY
+
+
+CREATION of Sentinel Policy---------------------------
+workspaces--> settings--> Policies--> create a new Policy--> Sentinel --> Name: abc -->Policy code (Sentinel) : paste the code----> create 
+
+
+
+
+# Import the Terraform plan functions
+import "tfplan"
+
+# Required tags
+required_tags = ["Environment", "Owner"]
+
+# Get the resource changes for AWS EC2 instances
+ec2_instances = filter tfplan.resources as r {
+  r.type is "aws_instance" and r.applied.tags is not null
+}
+
+# Function to check if the required tags exist in the instance's tags
+check_tags = func(instance) {
+  all required_tags as tag {
+    tag in keys(instance.applied.tags)
+  }
+}
+
+# Main rule that ensures all EC2 instances have the required tags
+main = rule {
+  all ec2_instances as instance {
+    check_tags(instance)
+  }
+}
+
+
+
+
+
+now go to the Policy sets --> Connect a policy set--> individually managed policies --> Sentinel --> Name:abc --> next
+Policies--> SELECET YOUR policy--> connect to set Policy--> close summary
+now run the confriguration 
