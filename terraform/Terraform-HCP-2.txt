@@ -1,0 +1,164 @@
+Secure Secrets in Terraform Code:
+
+TIP 1: Do Not Store Secrets in Plain Text
+TIP 2: Mark Variables as Sensitive
+TIP 3: Environment Variables
+TIP 4: Secret Stores (e.g., Vault, AWS Secrets manager)
+
+NOTE: Even after marked a value as sensitive in tf file, they are stored within the Terraform state file. 
+
+It is recommended to store security creds outside of terraform.
+
+ENV VARIABLE:
+
+export TF_VAR_instance_type="t2.medium"
+
+main.tf----
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+  ami           = "ami-04823729c75214919"
+  instance_type = var.instance_type
+  tags = {
+    instance_name = "rahaminstance"
+  }
+}
+
+variable "instance_type" {
+}
+
+
+VARIABLE PRECEDENCE-------------------------------------------------------------------------------------
+VARIABLE PRECEDENCE : DEFINES THE LEVEL PRIORITY FOR VARIABLES IN TERRAFORM
+TERRAFORM WILL PICK THE VARIABLES BY BELOW ORDER
+
+1. CLI
+2. AUTO.TFVARS
+3. TERRAFORM.TFVARS.JSON
+4. TERRAFORM.TFVARS
+5. ENV VARIABLE
+6. VARIABLE.TF
+
+
+BUILT IN FUNCTIONS:----------------------------------------------------------------------------------------------------
+
+
+Terraform has built-in functions that you can call from within expressions to transform and combine values.
+
+FUNCTIONS WILL HAVE () AND VALUES ON IT
+EACH VALUE IS SEPERATE BY ,
+
+terraform console
+
+> max(20, 40, 99)
+99
+
+> max(20, 40, 99)
+20
+
+> lower("HELLO")
+hello
+
+
+ctrl+d: to come out from the terraform console.
+
+
+
+
+
+
+TOLIST:---------------------------------------------------------------
+
+
+provider "aws" {
+}
+
+resource "aws_instance" "example" {
+  count         = length(var.instance_types)
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = tolist(var.instance_types)[count.index]
+}
+
+variable "instance_types" {
+  type    = LIST(string)
+  default = [ "t2.nano", "t2.micro", "t2.large", "t2.medium",]
+                0             1          2           3
+}
+
+
+LIST VS SET:----------------------------------------------------------
+
+list:				set:
+
+Duplicates allowed		Duplicates not allowed: 
+Indexing(starting from 0)	No indexing
+
+
+
+
+
+MAP: -------------------------------------------------------
+MAP: used to pass both key and value to variables.
+use mostly used to assign tags for resources.
+KEY-VALUE can also called as object or Dictionary.
+
+
+provider "aws" {
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0fff1b9a61dec8a5f"
+  instance_type = "t2.micro"
+  tags          = var.instance_tags
+}
+
+variable "instance_tags" {
+  type = map(string)
+  default = {
+    Name   = "raham"
+    client = "Swiggy"
+    Env    = "dev"
+  }
+}
+
+
+Terraform Remote State------------------------------------------------------------------------------
+
+Terraform Remote State: (Enhanced Backend)
+
+There are only two enhanced backends: local and remote
+
+The remote backend stores Terraform state and may be used to run operations in Terraform Cloud. 
+When we run plan/apply we can see logs in local. 
+Remote plans and applies use variable values from the associated Terraform Cloud workspace.
+
+STEP-1: CREATE A TERRAFORM WORKSPACE
+SETP-2: SELECT CLI DRIVEN & GIVE WORKSPACE NAME 
+SETP-3: COPY CODE FROM TERRAFORM CLOUD TO MAIN.TF
+STEP-4: terraform login command to server
+
+terraform login -- > yes -- > copy paste link on browser -- > generate a token -- > copy token server
+terraform init
+terraform plan
+copy paste link on browser
+
+
+main.tf: -
+provider{
+region ="ap-south-1"
+}
+terraform { 
+  cloud { 
+    
+    organization = "ayushraj02929" 
+
+    workspaces { 
+      name = "dummy" 
+    } 
+  } 
+}
+resource "aws_instance" "example" {
+  ami           = "ami-0dee22c13ea7a9a67"
+  instance_type = "t2.micro"
+}
