@@ -92,7 +92,7 @@ resource "aws_instance" "fourth" {
   subnet_id      = aws_subnet.one.id
   ami            = "ami-078264b8ba71bc45e"
   instance_type  = "t2.micro"
-  key_name       = "abc"
+  key_name       = "devops"
   tags = {
     Name = "${local.env}-instance"
   }
