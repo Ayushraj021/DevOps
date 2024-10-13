@@ -35,4 +35,4 @@ provider "aws"{
 
 4. now run for whatever you want to import.
 
-terraformer import aws --resources=ec2_instance, sg, elb --region=ap-south-1
+terraformer import aws --resources=ec2_instance, sg, elb, s3 --region=ap-south-1
