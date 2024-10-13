@@ -1,0 +1,38 @@
+1. connect the instance and run: -
+
+
+
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+aws configure
+
+
+
+
+
+
+wget https://github.com/GoogleCloudPlatform/terraformer/releases/download/0.8.24/terraformer-all-linux-amd64
+chmod +x terraformer-all-linux-amd64
+sudo mv terraformer-all-linux-amd64 /usr/local/bin/terraformer
+terraformer --version
+
+COMMAND: terraformer import aws --resources=sg,ec2_instance,elb --regions=us-east-1
+yum install tree -y
+tree
+
+
+
+
+2. create a directory(terraform and create a main.tf)
+
+
+3. main.tf: -
+provider "aws"{
+
+}
+
+
+4. now run for whatever you want to import.
+
+terraformer import aws --resources=ec2_instance, sg, elb --region=ap-south-1
