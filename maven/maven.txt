@@ -1,0 +1,104 @@
+MAVEN:
+
+raw chicken -- >  clean  --> marnet -- > ingredients -- > Chicken Biryani
+raw code    -- > build   -- > test  -- > artifact -- > Deployment
+
+ARTIFACT: its final product of our code.
+developers will give raw code that code we are going to convert into artifact.
+
+TYPES:
+1. jar	: Java Archive       : Backend code
+2. war	: Web Archive	     : Frontend code + Backend code
+3. ear	: Enterprise Archive : jar + war 
+
+JAR FILE:
+
+.java -- > compile -- > .class -- > .jar file
+
+.java	: basic raw
+.class	: executable file
+.jar	: artifact
+
+all the artifacts are going to created by a build too1.
+
+MAVEN:
+Maven is the build tool.
+its a free and opensource.
+build: process of adding the libs & dependencies to code.
+its is also called as Project management too1.
+it will manage the complete structure of the project.
+the main file in the maven tool is POM.XML
+
+POM.XML: its a file which consist of complete project information.
+Ex: name, artifact, tools, libs, dep --------
+
+POM: PROJECT OBJECT MODEL
+XML: EXTENSIBLE MARKUP LANGUAGE
+
+WHO GIVE POM.XML : DEVELOPERS
+dev will give both code and pom.xml in github
+
+maven is written on java by apache software foundation.
+supports: JAVA-1.8.0
+year: 2004
+home path: .m2
+
+
+PRATCICAL PART:
+1. CREATE AN EC2 INSTANCE AND CONNECT
+2. yum install git java-1.8.0-openjdk maven tree -y
+3. git clone https://github.com/devopsbyraham/jenkins-java-project.git
+4. cd jenkins-java-project
+
+
+MAVEN LIFECYCLE:
+GOALS : a command used to run a task.
+Goals refers pom.xml to execute.
+
+
+PLUGIN: its a small software with makes our work automated.
+instead of downloading tools we can download plugins.
+this plugins will download automatically when we run goals.
+
+
+1. mvn compile : used to compile the code (.java [src] -- > .class [target])
+2. mvn test    : used to test the code    (.java [test] -- > .class [target])
+3. mvn package : used to create artifact 
+4. mvn install : used to copy artifact to .m2 (project folder -- > .m2)
+5. mvn clean   : to delete the target folder
+
+6. mvn clean package: compile -- > install
+
+mvn clean     : remove old war files
+mvn package   : compile -- > test -- > artifact
+
+
+PROBLEMS WITHOUT MAVEN:
+1. we cant create artifacts.
+2. We cant create project structure.
+3. we cant build and deploy the apps.
+
+ALTERNATIVIES:
+MAVEN, ANT, GRADLE 
+
+PROGRAMMING VS BUILD:
+
+JAVA	: MAVEN
+PYTHON	: GRADLE
+.NET	: VS CODE
+C, C#	: MAKE FILE
+node.js	: npm
+
+ALTERNETIAVES: 
+ANT, GRADLE for java projects.
+
+MAVEN VS ANT:
+1. MAVEN IS BUILD & PROJECT MANAGEMNT, ANT IS ONLY BUILD TOOL
+2. MAVEN HAS POM.XML, ANT HAS BUILD.XML
+3. MAVEN HAS A LIFECYCLE, ANT WILL NOT HAVE LIFECYCLE
+4. MAVEN PLUGINS ARE REUSABLE, ANT SCRIPTS ARE NOT RESUEABLE.
+5. MAVEN IS DECLARATIVE, ANT IS PROCEDURAL.
+
+SYNOPSIS:
+maven is a build tool -- > artifacts -- > java & python -- > mvn clean package
+remove old artifact and compile, test and create artifact to deploy the app
