@@ -1,0 +1,112 @@
+JEKINS IS A CI/CD TOOL.
+REALITY: JENKINS IS ONLY FOR CI.
+
+CI : CONTINOUS INTEGRATION : CONTINOUS BUILD + CONTINOUS TEST (OLD CODE WITH NEW CODE)
+
+DAY-1: 100 LINES : BUILD + TEST
+DAY-2: 200 LINES : BUILD + TEST
+DAY-3: 300 LINES : BUILD + TEST
+
+BEFORE CI:
+MANUAL PROCESS
+TIME WASTE
+
+AFTER CI:
+AUTOMATED PROCESS
+TIME SAVING
+
+CD: CONTINOUS DELIVERY/DEPLOYMENT
+
+ENV:
+
+PRE-PROD/NON-PROD:
+DEV    : developers
+QA    : testers
+UAT    : clients
+
+LIVE/PROD ENV:
+PROD    : users
+
+CONTINOUS DELIVERY: Deploying the application to production in manual.
+CONTINOUS DEPLOYMENT: Deploying the application to production in automatic.
+
+
+PIPELINE:
+
+WAKEUP -- > DAILY ACTIVITIES -- > BREAKFAST -- > LUNCH -- > CLASS
+CODE -- > COMPILE -- > TEST -- > ARTIFACT -- > DEPLOY
+
+SETP BY STEP EXECUTION OF A PROCESS.
+SERIES OF EVENTS INTERLINKED WITH EACHOTHER.
+
+
+JENKINS:
+ITS A FREE AND OPEN-SOURCE TOOL.
+IT IS PLATFORM INDEPENDENT.
+JENKINS WRITTEN ON JAVA.
+IT CONSIST OF PLUGINS.
+WE HAVE COMMUNITY SUPPORT.
+IT CAN AUTOMATE ENTIRE SDLC.
+IT IS OWNED BY SUN MICRO SYSTEM AS HUDSON.
+HUDSON IS PAID VERSION.
+LATER ORACLE BROUGHT HUDSON AND MAKE IT FREE.
+LATER HUDSON WAS RENAMED AS JENINS.
+INVENTOR: Kohsuke Kawaguchi
+PORT NUMBER: 8080
+JAVA: JAVA-11/17
+DEFAULT PATH: /var/lib/jenkins
+
+ALTERNATIVES:
+BAMBOO, GO CI, CIRCLE CI, TARVIS, SEMAPHORE, BUDDY BUILD MASTER, GITLAB, HARNESS
+ARGOCD -----
+
+CLOUD: AWS CODEPIPELINE, AZURE PIPLEINE ---------------------
+
+
+
+SETUP: Create an EC2 and Include all traffic in sg
+
+#STEP-1: INSTALLING GIT JAVA-1.8.0 MAVEN
+yum install git java-1.8.0-openjdk maven -y
+
+#STEP-2: GETTING THE REPO (jenkins.io --> download -- > redhat)
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+#STEP-3: DOWNLOAD JAVA11 AND JENKINS
+amazon-linux-extras install java-openjdk11 -y
+yum install jenkins -y
+update-alternatives --config java
+
+#STEP-4: START JENKINS (when we download service it will on stopped state)
+systemctl start jenkins.service
+systemctl status jenkins.service
+
+CONNECT:
+copy-public-ip:8080 (browser)
+cat /var/lib/jenkins/secrets/initialAdminPassword (server)
+paster password on browser -- > installing plugins --- > user details -- > start
+
+
+JOB: it is used to perform task.
+to do any work or task in jenkins we need to create a job.
+
+to run commands we need to select execute shell on build steps.
+
+build now: to run job
+workspace: place where our job outputs will store
+
+CREATING A JOB:
+NEW ITEM -- > NAME: ci-job -- > FREESTYLE -- > OK -- > SCM -- > GIT -- > REPOURL: https://github.com/devopsbyraham/jenkins-java-project.git -- >Build Steps -- > ADD Build Steps -- > Execute shell -- > mvn clean package -- > save -- > build now
+
+WORKSPACE: where your job output is going to be stored
+Default: /var/lib/jenkins/workspace
+
+CUSTOME WORKSPACE: Storing the jobs output on our own folders 
+cd 
+mkdir ayush
+cd /
+chown jenkins:jenkins /root
+chown jenkins:jenkins /root/ayush
+Go to the jenkins dashboard 
+go to your job --> configure --> general --> advanced --> Use custom workspace --> /root/ayush --> save
