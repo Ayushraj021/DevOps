@@ -1,0 +1,68 @@
+TYPES OF VARIABLES IN JENKINS:
+1. USER DEFINED
+2. JENKINS ENV
+
+1. USER DEFINED VARIABLES: these are defined by user
+
+a. Local Variable: Variable will work inside of job.
+will be working for only single job.
+
+NEW ITEM -- > NAME: ABC -- > FREESTYLE -- > OK -- > BUILD -- >EXECUTE SHELL
+
+name=raham
+echo "hai all my name is $name, $name is from hyderabad, $name is teaching devops"
+
+WITH PARAMETERS:
+take branch as variable
+
+passing parameters:
+configure -- > this project is parameterized -- > choice -- > name: branch values: main, master --
+build with parameters.
+
+b. Global Variable: Variable will work outside of job.
+will be working for multiple job.
+
+
+Dashboard -- > Manage Jenkins -- > System -- > Global properties  -- > Environment variables -- > add : Name: name value: raham -- > save
+
+NOTE: while defining variables spaces will not be given.
+local variables will be high priority.
+
+Limitation: some values cant be defined by user because these values will change build by build.
+ex: build number, time, name, url -----
+
+2. JENKINS ENV VARIABLES: these are defined by Jenkins itself.
+a. these variables can be change from build to build.
+b. these variables will be on upper case.
+c. these variables can be defined only once.
+
+echo "the build number is $BUILD_NUMBER, the job name is $JOB_NAME"
+
+printenv: gives all env vars of jenkins
+
+
+
+find / -name jenkins.service
+find command used to find the path of a file.
+
+when we modify any file from system folder we need to reload daemon
+
+
+ADMIN TASKS:
+1. CHANGING PORT NUMBER OF JENKINS:
+
+vim /usr/lib/systemd/system/jenkins.service
+line-70: 8080=8090 -- > save and exit
+systemctl daemon-reload
+systemctl restart jenkins.service
+
+When we change configuration of any service we need to restart.
+
+2. PASSWORDLESS LOGIN
+
+vim /var/lib/jenkins/config.xml
+line-10: true=false
+systemctl daemon-reload
+systemctl restart jenkins.service
+
+now check the jenkins dashboard it wont ask password
