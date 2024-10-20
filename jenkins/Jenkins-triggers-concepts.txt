@@ -1,0 +1,79 @@
+CRON JOB: We can schedule the jobs that need to be run at particular intervals.
+here we use cron syntax
+cron syntax has * * * * *
+each * is separated by space
+
+*    : minutes
+*    : hours
+*    : date
+*    : month
+*    : day of week (sun=0, mon=1 ----)
+
+10:30 pm 4 aug sun
+21 9 3 8 6
+create a ci job -- > Build Triggers -- > Build periodically -- > * * * * * -- > save
+
+CRONTAB-GENERATOR: https://crontab.guru/
+
+limitation: it will not check the code is changed or not.
+
+http://54.159.60.215:8080/
+
+
+POLL SCM:
+in pollscm we will set time limit for the jobs.
+if dev commit the code it will wait until the time is done.
+in given time if we have any changes on code it will generate a build
+
+create a ci job -- > Build Triggers -- > poll scm -- > * * * * * -- > save
+commit the changes in GitHub then wait for 1 min.
+
+LIMITATION:
+1. in pollscm, we need to wait for the time we set.
+2. we will get the last commit only.
+
+WEBHOOK: it will trigger build the moment we change the code.
+here we need not to wait for the build.
+
+repo -- > settings -- > webhooks -- > add webhook -- > Payload URL (jenkins url) -- > http://35.180.46.134:8080/github-webhook/  -- > Content type -- > application/json -- > add
+
+create ci job -- > Build Triggers: GitHub hook trigger for GITScm polling -- > save
+
+
+BUILD SCRIPTS: to make jenkins builds from remote loc using script/
+give token
+give url on other browser.
+
+THROTTLE BUILD:
+
+To restrict the builds in a certain time or intervals.
+if we dont restrict due to immediate builds jenkins might crashdown.
+
+by default jenkins will not do concurrent builds.
+we need to enable this option in configuration.
+
+Execute concurrent builds if necessary -- > tick it
+
+create a ci job -- > configure -- > Throttle builds -- > Number of builds: 3 -- > time period : hours -- > save
+
+now it will take 20 minutes of gap for each build.
+
+
+
+BUILD EXECUTORS & PARALLEL BUILDS:
+Jenkins will run the jobs sequentially (one by one)
+if i want to run multiple builds at same time we can configure like this
+
+job -- > configure -- > Execute concurrent builds if necessary -- > save -- > build now 2 times
+now we can see 2 jobs will be running on same time.
+
+BUILD EXECUTORS: max number of builds we can run
+build-executor status -- > Built-In Node -- > Configure -- > 2 - 5 -- >save
+now build 5 times
+
+
+WHEN WE STOP SERVER:
+1. IP WILL CHANGE
+2. SERVICES WILL BE STOPPED
+
+chkconfig jenkins on: to start the service automatically whenever we restart it.
