@@ -66,3 +66,15 @@ systemctl daemon-reload
 systemctl restart jenkins.service
 
 now check the jenkins dashboard it wont ask password
+
+
+
+3. HOW TO RESOLVE THE ISSUE IF JENKINS SERVER CRASHED ?
+stop the jenkins server and start it
+systemctl restart jenkins
+
+When we stop server the services will be also stopped
+so we want to restart them
+
+systemctl stop jenkins.service
+systemctl restart Jenkins.service
