@@ -1,0 +1,237 @@
+PIPELINE: STEP BY EXECUTION OF A PROCESS
+SERIES OF EVENTS INTERLINKED WITH EACH OTHER.
+
+code -- > build -- > test -- > artifact -- > deployment
+
+IF PIPELINE FAILS ON STAGE-1 IT WONT GO FOR STAGE-2.
+
+plugin download:
+Dashboard
+Manage Jenkins
+Plugins
+available
+pipeline stage view
+install
+Restart
+
+
+why to use ?
+to automate the work.
+to have clarity about the stage.
+
+TYPES:
+1. DECLARATIVE
+2. SCRIPTED
+
+pipeline syntax:
+to write the pipeline we use DSL.
+We use Groovy Script for jenkins Pipeline.
+it consists of blocks that include stages.
+it includes () & {} braces.
+
+
+SHORTCUT: PASSS
+
+P    : PIPELINE
+A    : AGENT
+S    : STAGES
+S    : STAGE
+S    : STEPS
+
+
+SINGLE STAGE: this pipeline will have only one stage.
+
+EX-1:
+pipeline {
+    agent any
+   
+    stages {
+        stage('abc') {
+            steps {
+               sh 'touch file1'
+            }
+        }
+    }
+}
+
+EX-2:
+pipeline {
+    agent any
+   
+    stages {
+        stage('raham') {
+            steps {
+                sh 'touch file2'
+            }
+        }
+    }
+}
+
+MULTI STAGE: this pipeline will have more than one stage.
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('two') {
+            steps {
+                sh 'lsblk'
+            }
+        }
+        stage ('three') {
+            steps {
+                sh 'lscpu'
+            }
+        }
+        stage ('four') {
+            steps {
+                sh 'lsmem'
+            }
+        }
+    }
+}
+
+
+CI PIPELINE:
+
+CODE + BUILD + TEST + ARTIFACT
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+            }
+        }
+        stage ('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage ('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage ('artifact') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+}
+
+
+PIPELINE AS A CODE: Running more than one command/action inside a single stage.
+to reduce the length of the code.
+to save the time.
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+                sh 'mvn compile'
+                sh 'mvn test'
+                sh 'mvn package'
+            }
+        }
+    }
+}
+
+MULTI STAGE PIPELINE AS A CODE: Running more than one command/action in multiple stages.
+
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('one') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+                sh 'mvn compile'
+            }
+        }
+        stage ('two') {
+            steps {
+                sh 'mvn test'
+                sh 'mvn package'
+            }
+        }
+    }
+}
+
+PAAC OVER SINGLE SHELL: Running all the shell commands on a single shell.
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('one') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+                sh '''
+                mvn compile
+                mvn test
+                mvn package
+                '''
+            }
+        }
+    }
+}
+
+
+INPUT PARAMETERS: BASED ON USER INPUT THE PIPELINE IS GOING TO EXECUTE.
+used to avoid the mistakes.
+pipeline will wait until we provide the input.
+
+pipeline {
+    agent any
+   
+    stages {
+        stage ('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+            }
+        }
+        stage ('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage ('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage ('artifact') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage ('deploy') {
+            input {
+                message "is your inputs correct ?"
+                ok "yes"
+            }
+            steps {
+                echo "my code is deployed"
+            }
+        }
+    }
+}
+NOTE: In real time providing manual approval is best practise for Jenkins pipelines.
+
+NOTE: if we have syntax issue none of the stages will execute.
+
+DIFF BLW SCRIPTED VS DECLARATVE
+
+SCRIPTED:     DECLARATIVE:
+SHORT       LONG
+NO STAGES       IT HAS STAGES
+START NODE      START WITH PIPELINE
+
