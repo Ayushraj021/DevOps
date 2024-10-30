@@ -1,0 +1,74 @@
+ASSIGNMENT-5
+ TASK: CREATE A PIPELINE THAT DEPLOYS AWS EC2
+ TAKE THE TERRAFORM CODE FROM GITHUB->Launch an ec2-instance with amazon2 ami. ->Attach a role to  that instance  it give access to ec2-instance.-> Connect to that instance.
+-> Run the commands.
+ #STEP-1: 
+#STEP-2: 
+yum install git java-1.8.0-openjdk maven -y
+ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+ #STEP-3: 
+amazon-linux-extras install java-openjdk11 -y
+ yum install jenkins -y
+ update-alternatives --config java
+ #STEP-4: 
+systemctl start jenkins.service
+ systemctl status jenkins.service
+#CONNECT:
+ copy-public-ip:8080 (browser)
+ cat /var/lib/jenkins/secrets/initialAdminPassword (server)
+ paster password on browser -- > installing plugins --- > user details -- > start
+ #plugin download:
+ Dashboard-->Manage Jenkins-->Plugins-->Available Plugins-->select pipeline
+ stage view--> install-->Enable restart jenkins
+ #Install Terraform:
+ sudo yum install -y yum-utils shadow-utils
+ sudo yum-config-manager --add-repo 
+https://rpm.releases.hashicorp.com/Ama    zonLinux/hashicorp.repo
+ sudo yum -y install terraform
+#CREATING A PIPELINE:
+ NEW ITEM -- > NAME: pipeline-1-- > PIPELINE -- > OK 
+#PIPELINE SCRIPT: PIPELINE AS A CODE
+ pipeline{
+    agent any
+    stages{
+        stage('checkout'){
+            steps{
+                git: 'main', url: 'https://github.com/likhitha-10/ec2pipeline.git'
+            }
+        }
+        stage('terraform'){
+            steps{
+                sh 'terraform init'
+                sh 'terraform plan'
+                sh 'terraform apply -auto-approve'
+            }
+        }
+pipeline{
+    agent any
+    stages{
+        stage('checkout'){
+            steps{
+            git: 'main', url: 'https://github.com/likhitha-10/ec2pipeline.git'
+
+            }
+        }
+        stage('terraform init'){
+            steps{
+                sh 'terraform init'
+            }
+        }
+        stage ('terraform plan'){
+            steps{
+                sh 'terraform plan'
+            }
+        }
+        stage ('terrafom apply'){
+            steps{
+                sh 'terraform apply -auto-approve'
+            }
+        }
+        
+    }
+ }
+ #PIPELINE SCRIPT:SINGLE STAGE 
