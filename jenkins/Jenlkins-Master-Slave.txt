@@ -55,3 +55,43 @@ pipeline {
 
 
 
+POST BUILD ACTIONS:--------------------------------------------------------------------------------
+Actions that perform after build is done.
+
+
+1. always    : executes always
+2. success    : executes when build is success only
+3. failure    : executes when build is failed only
+
+
+pipeline {
+    agent any
+   
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git&#39;
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Artifacts') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+    post {
+        always {
+            echo "this build is completed"
+        }
+    }
+}
