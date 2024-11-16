@@ -1,0 +1,156 @@
+
+ #CREATE 4 SERVERS:
+ server-1: jenkins
+ server-2:slave-1
+ server-3:slave-2
+ server-4:nexus
+
+ #connect to server-1: By using below commands
+ yum install git java-1.8.0-openjdk maven -y
+ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+ yum install jenkins -y
+ amazon-linux-extras install java-openjdk11 -y
+ update-alternatives --config java
+ systemctl start jenkins.service
+ systemctl status jenkins.service
+
+#connect to slave-1: By using below commands
+ yum install git java-1.8.0-openjdk maven -y
+ amazon-linux-extras install java-openjdk11 -y
+ update-alternatives --config java
+
+ #CONNECT TO SLAVE-2: By using below commands
+ yum install git java-1.8.0-openjdk maven -y
+ amazon-linux-extras install java-openjdk11 -y
+ update-alternatives --config java
+
+ #CONNECT TO NEXUS SERVER: By using below commands
+ create a file : vim nexus.sh
+ go to github : https://github.com/RAHAMSHAIK007/all-setups/blob/master/nexus.sh
+ 
+ #copy the script and paste it on file and save &exit
+ run the script:sh nexus.sh
+
+#CONNECT TO JENKINS CONSOLE:
+ copy-public-ip:8080 (browser)
+ cat /var/lib/jenkins/secrets/initialAdminPassword (server)
+ paste password on browser -- > installing plugins --- > user details -- > start
+ 
+ #CREATE A JOBS:
+ JOB-1: NEW ITEM -- > NAME: job1 -- > FREESTYLE -- > OK 
+JOB-2: NEW ITEM -- > NAME: job2 -- > FREESTYLE -- > OK 
+JOB-3: NEW ITEM -- > NAME: job 3-- > PIPELINE -- > OK 
+
+# Go to job-1:
+ configure--> General--> Advances --> Use custom workspace --> /root/abcd  -->SCM -- >
+ GIT -- > Repourl: 
+https://github.com/devopsbyraham/jenkins-java-project.git -- >Build
+ Steps -- > Add Build Steps -- > Execute shell -- > mvn clean package -- > Save
+
+ #GO TO  JENKINS MOBAXTERM:
+ cd / 
+mkdir abcd
+ cd abcd/
+ chown jenkins:jenkins root/
+ chown jenkins:jenkins root/abcd/
+
+#CREATE A SLAVE-1:
+ Dashboard -- > Manage Jenkins -- > Nodes -- > New node -- > nodename: Slave-1 -- >
+ permanaent agent -- > save
+
+ #CONFIGURATION OF SALVE-1:
+ Number of executors : 2
+ Remote root directory : /tmp #The place where our output is stored on slave sever.
+ Labels : one
+ useage: last option
+ Launch method : last option
+ Host: (your privte ip)
+ Credentials -- > add -- >jenkins -- > Kind : ssh username with privatekey -- > username: ec2-user
+ privatekey : pemfile of server -- > save 
+Host Key Verification Strategy: last option
+ DASHBOARD -- > JOB 2-- > CONFIGURE -- > RESTRTICT WHERE THIS JOB RUN -- > LABEL: ONE -- > SAVE
+ 
+ #GO TO JOB-2:
+ configure -- > General --> Restrict where this project can be run --> Label Expression-->
+ one --> GIT -- > Repourl: 
+https://github.com/devopsbyraham/jenkins-java-project.git -
+>Build Steps -- > Add Build Steps -- > Execute shell -- > printenv -- > Save
+
+#CONNECT TO NEXUS CONSOLE:
+ copy-public-ip:8081 (browser)
+ signin -- > username: admin & password: /app/sonatype-work/nexus3/admin.password-- > next -- > set password -- > disable anonymous access -- > save
+ 
+ #CREATING REPO:
+ settings symbol -- > repositories -- > new -- > maven2(hosted) -- > netflix -- > save
+ 
+ #DOWNLOAD PLUGINS:
+ Manage Jenkins -- > plugins -- > Available Plugins -- > Nexus Artifact Uploader &
+ Pipeline Stage View -- > install.
+ 2. Configure it to pipeline by using pipeline syntax
+ NOTE: All the information will be available on pom.xml file.
+
+#CREATE A SLAVE-2:
+ Dashboard -- > Manage Jenkins -- > Nodes -- > New node -- > nodename: Slave-2 -- >
+ permanaent agent -- > save
+
+ #CONFIGURATION OF SALVE-2:
+ Number of executors : 2
+ Remote root directory : /tmp 
+Labels :  two
+ useage: last option
+ Launch method : last option
+ Host: (your privte ip)
+ Credentials -- > add -- >jenkins -- > Kind : ssh username with privatekey -- > username: ec2-user
+ privatekey : pemfile of server -- > save 
+Host Key Verification Strategy: last option
+ DASHBOARD -- > JOB 2-- > CONFIGURE -- > RESTRTICT WHERE THIS JOB RUN -- > LABEL: two -- > SAVE
+
+ #GO TO JOB-3:
+ configure --> pipeline script --> save
+ note :  At the nexus stage change credentialsid as your actual credentialsid & nexus url  
+as your actual nexus url
+pipeline {
+    agent{
+        label 'two'
+    }
+   
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/likhitha-10/jenkins-java-project.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('nexus'){
+            steps{
+                nexusArtifactUploader artifacts: [[artifactId: 'NETFLIX', classifier: '', file: 'target/NETFLIX-1.2.2.war', type: '.war']], credentialsId: 'a41639c6-8a66-422f-b533
+d58dd5d5902a', groupId: 'in.RAHAM', nexusUrl: '52.64.143.35:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'netflix', version: '1.2.2'
+            }
+        }
+        
+    }
+ }
+
+
+
+
+
+#GO TO JOB-1:
+ Configure--> Post-build Actions --> Projects to build  -->  job-2,job-3--> Trigger only if build is stable Build periodically --> save
+ Configure-->Build Triggers --> Build periodically --> Schedule --> 56 01 23
+ 10 3(based on your time to change this corn expression) --> save 
