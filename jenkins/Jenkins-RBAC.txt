@@ -1,0 +1,75 @@
+RBAC: ROLE BASE ACCESS CONTROL.
+TO restrict the user PERMISSIONS in jenkins.
+
+yesudas    = fresher
+raham    = exp
+
+STEP-1: USER CREATION
+manage jenkins -- > users -- > create users -- > suresh: fresher
+
+STEP-2: PLUGIN DOWNLOADING
+Dashboard
+Manage Jenkins
+Plugins
+Available plugin
+Role-based Authorization Strategy  
+
+STEP-3: CONFIGURE THE PLUGIN
+Dashboard
+Manage Jenkins
+Security
+Authorization
+Role-based  Strategy  
+SAVE
+
+STEP-4: MANAGE AND ASSIGN ROLES TO USERS
+manage roles -- > add -- > fresher & exp -- > fresher: overall read & exp: admin -- > save
+assign roles -- > add user -- > yesudas: fresher -- > save
+
+
+RESTRICTING TO SPECIFIC JOB:
+MANAGE JENKINS -- > SECURITY --> AUTHORIZATION -- > PROJECT BASED MATRIX AUTHORIZATION STRATEGY -- >
+
+ADD USER -- > YESUDAS -- > Read
+
+
+GO TO JOB -- > Enable project-based security
+ADD USER -- > YESUDAS
+JOB: BUILD & READ
+SAVE
+
+
+LINKED JOBS:
+ONE JOB IS LINKED WITH ANOTHER JOB
+IF WE BUILD JOB-1 AUTOMATICALLY JOB-2 IS GOING TO BUILD.
+
+JOB-1 --> CONFIGURE -- > POSTBILD ACTIONS -- > BILD OTHER PROJECTS -- > JOB-2 -- > SAVE
+BUILD JOB-1 AND JOB-2 WILL BE TRIGGERED
+
+HOW TO ADD PARAMETERS:
+
+PARAMETERS: Used to pass inputs for jobs
+
+CHOICE: to pass single input at a time.
+STRING: to pass multiple inputs at a time.
+------------
+MULTI-LINE STRING: to pass multiple inputs on multiple lines at a time.
+FILE: to pass the file as input.
+BOOL: to pass input either yes or no.
+
+
+This project is parameterized
+Name: server
+Choices:
+dev
+test
+save
+
+CUSTOM THEMES:
+
+dashboard -- > manage Jenkins -- > Appearance -- > Customizable theme -- > CSS
+https://github.com/alefnode/jenkins-themes
+
+https://cdn.rawgit.com/afonsof/jenkins-material-theme/gh-pages/dist/material-cyan.css
+
+ADD HEADERS OF NARESHIT AND USE LOGO FROM IMAGES.
