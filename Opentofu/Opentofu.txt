@@ -1,0 +1,61 @@
+OpenTofu is an open-source project that serves as an alternative to Terraform, designed to help automate the management of infrastructure using code (Infrastructure as Code - IaC). It allows DevOps engineers and developers to define, provision, and manage infrastructure across various cloud providers using declarative configuration files. Here's an overview of what makes OpenTofu unique and how it works:
+
+Key Features of OpenTofu:
+Community-Driven & Open Source: OpenTofu is a fully open-source project that’s not controlled by a single company. This makes it an attractive alternative to Terraform, which is governed by HashiCorp. It focuses on transparency, collaboration, and freedom from vendor lock-in.
+
+HCL (HashiCorp Configuration Language) Compatibility: OpenTofu is designed to be compatible with Terraform’s HCL. This means you can reuse your existing Terraform configurations without significant changes. The tool supports the same syntax and structure, which makes it easy for developers familiar with Terraform to transition.
+
+Multi-Cloud Support: OpenTofu supports a wide range of cloud providers and services, making it versatile in managing infrastructure across multiple platforms, such as AWS, Azure, Google Cloud, and others.
+
+State Management: Just like Terraform, OpenTofu manages the state of the infrastructure. This means it tracks the resources you've provisioned and ensures that your configuration and the actual infrastructure are always in sync.
+
+Modular Approach: OpenTofu encourages reusable and modular infrastructure code, making it easier to manage large projects by breaking configurations into manageable, reusable components.
+
+Extensibility: OpenTofu allows users to extend the functionality through plugins and integrations, enabling support for custom providers and services that may not be included out of the box.
+
+Why Choose OpenTofu?
+Avoid Vendor Lock-In: As it’s open-source and not tied to any single vendor, OpenTofu gives you flexibility to choose the best tools and cloud providers for your needs.
+Community-Driven Innovation: With OpenTofu, you get the benefits of a collaborative ecosystem where contributions come from a wide array of developers and companies.
+Simplicity and Efficiency: For users already familiar with Terraform, OpenTofu provides a smooth transition while enhancing the flexibility and openness of infrastructure management.
+How Does OpenTofu Work?
+Like Terraform, you define your infrastructure in code (using HCL), and then OpenTofu runs the plan to determine what resources need to be created, modified, or destroyed. The tool interfaces with the cloud provider APIs to make the necessary changes and keeps track of the infrastructure state to ensure consistency.
+
+
+
+
+
+
+
+INSTALLATION:
+Launch an Ubuntu machine
+wget https://github.com/opentofu/opentofu/releases/download/v1.6.0-alpha3/tofu_1.6.0-alpha3_linux_amd64.zip
+unzip tofu_1.6.0-alpha3_linux_amd64.zip
+cp tofu /usr/local/bin/
+tofu version
+
+CODE:
+
+provider "aws" {
+region = "us-east-1"     #
+}
+
+resource "aws_instance" "one" {
+ami = "ami-0dee22c13ea7a9a67"
+instance_type = "t2.micro"
+}
+
+
+PULUMI:
+PULUMI is again an alternative of terraform.
+
+
+INSTALL PULUMI & GO
+CREATE A FOLDER: pulumi new --dir abc
+CREATE AN ACCOUNT AND GIVE TOKEN
+
+
+
+wget https://go.dev/dl/go1.20.7.linux-amd64.tar.gz
+sudo tar -C /usr/local -xzf go1.20.7.linux-amd64.tar.gz
+echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
+go version
