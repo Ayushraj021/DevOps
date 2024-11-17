@@ -44,6 +44,16 @@ ami = "ami-0dee22c13ea7a9a67"
 instance_type = "t2.micro"
 }
 
+tofu init: Initializes the working directory and downloads necessary provider plugins.
+tofu validate: Checks the syntax and validity of the configuration files.
+tofu plan: Previews the changes that will be made to the infrastructure.
+tofu apply -auto -approve: Automatically applies the changes without confirmation.
+tofu destroy -auto -approve: Automatically destroys the infrastructure without confirmation.
+
+
+
+
+
 
 PULUMI:
 PULUMI is again an alternative of terraform.
@@ -59,3 +69,10 @@ wget https://go.dev/dl/go1.20.7.linux-amd64.tar.gz
 sudo tar -C /usr/local -xzf go1.20.7.linux-amd64.tar.gz
 echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
 go version
+
+
+
+
+
+pulumi config set instance_type t2.micro : The command pulumi config set instance_type t2.micro sets the configuration value instance_type to t2.micro for your Pulumi stack, which can be used later in your infrastructure code.
+pulumi up: This is the command used to deploy your infrastructure as defined in the Pulumi program.
