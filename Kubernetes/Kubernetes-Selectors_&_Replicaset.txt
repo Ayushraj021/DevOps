@@ -1,0 +1,104 @@
+LABELS:
+Labels are key-value pairs that are attached to pods, RC and services. 
+They can be added or modified at the during creation or run time.
+Rc manages pods based on labels only.
+kubectl run pod-1 --image=nginx  --labels="env=dev, app=swiggy"
+kubectl get pods --show-labels
+
+
+SELECTOR:
+Selector filter the Pods with same labels.
+There are two kinds of selectors: Equality based and Set base
+
+
+REPLICASET:
+
+It will create multiple replicas of same Pod.
+If One Pod deleted it will automatically create new Pod.
+All the pods will have same config. (from Template)
+We can do Auto Scaling and Load Balancing Through ReplicaSet.
+In Background Replication Controller  will be Responsible to create Replicas.
+ReplicaSets will use Labels and Selectors to identify Pods.
+Replication Controller is Older Version and ReplicaSet is New Version.
+
+CODE:
+
+vim replicaset.yml
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: yashuyadav6339/movies:latest
+
+COMANDS:
+TO CREATE              : kubectl create -f abc.yml      
+TO LIST                : kubectl get rs
+NODE INFO              : kubectl get pod -o wide
+COMPLETE INFO          : kubectl describe rs movies
+TO EDIT                : kubectl edit rs movies
+TO DELETE              : kubectl delete rs movies
+TO SCALE               : kubectl scale rs/movies --replicas=10 (LIFO)
+TO SHOW LABELS         : kubectl get pods -l app=Paytm
+
+we cant Rollin and rollout, we cant update the application in rs.
+
+DEPLOYMENT:
+It has features of RS and some other extra features like updating and rollbacking to a particular version.
+The best part of Deployment is we can do it without downtime.
+Deployment will create ReplicaSet, ReplicaSet will created Pods.
+
+CODE:
+
+vim deployment.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: yashuyadav6339/movies:latest
+
+
+
+COMMANDS:
+TO CREATE              : kubectl create -f abc.yml      
+TO LIST                : kubectl get rs
+NODE INFO              : kubectl get pod -o wide
+COMPLETE INFO          : kubectl describe rs movies
+TO EDIT                : kubectl edit rs movies
+TO DELETE              : kubectl delete rs movies
+TO SCALE               : kubectl scale rs/movies --replicas=10 (LIFO)
+TO SHOW LABELS         : kubectl get pods -l app=Paytm
+IMPERATIVE             :kubectl create deploy movies --image=name --replicas=4
+
+
+NOTE: TO GET INFO OF  DEPLOYMENT TO FILE
+kubectl create deployment movies  --image=name  --replicas=4 --dry-run=client -o yaml > movies-deployment.yml
