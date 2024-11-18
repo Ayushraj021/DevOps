@@ -1,0 +1,187 @@
+DOCKER ALTERNATIVES: containerd, rocket, cri-o
+
+
+CHIRU   : CLUSTER
+NAGABABU: NODE
+PAWAN   : POD
+CHARAN	: CONTAINER
+ALLU	: APP
+
+K8S:
+
+LIMITATIONS OF DOCKER SWARM:
+1. CANT DO AUTO-SCALING AUTOMATICALLY
+2. CANT DO LOAD BALANCING AUTOMATICALLY
+3. CANT HAVE DEFAULT DASHBOARD
+4. WE CANT PLACE CONATINER ON REQUITED SERVER.
+5. USED FOR EASY APPS. 
+
+HISTORY:
+Initially Google created an internal system called Borg (later called as omega) to manage its thousands of applications later they donated the borg system to cncf and they make it as open source. 
+initial name is Borg but later cncf rename it to Kubernetes 
+the word Kubernetes originated from Greek word called pilot or Hailsmen.
+Borg: 2014
+K8s first version came in 2015.
+
+
+INTRO:
+
+IT is an open-source container orchestration platform.
+It is used to automates many of the manual processes like deploying, managing, and scaling containerized applications.
+Kubernetes was developed by GOOGLE using GO Language.
+MEM -- > GOOGLE -- > CLUSTER -- > MULTIPLE APPS OF GOOGLE -- > BORG -- > 
+
+
+ARCHITECTURE:
+
+DOCKER : CNCA
+K8S: CNPCA
+
+C : CLUSTER
+N : NODE
+P : POD
+C : CONTAINER
+A : APPLICATION
+
+
+COMPONENTS:
+MASTER:
+
+1. API SERVER: communicate with user (takes command execute & give op)
+2. ETCD: database of cluster (stores complete info of a cluster ON KEY-VALUE pair)
+3. SCHEDULER: select the worker node to shedule pods (depends on hw of node)
+4. CONTROLLER: control the k8s objects (n/w, service, Node)
+
+WORKER:
+
+1. KUBELET : its an agent (it will inform all activites to master) It create containers.
+2. KUBEPROXY: it deals with nlw (ip, networks, ports)
+3. POD: group of conatiners (inside pod we have app)
+
+Note: all components of a cluster will be created as a pod.
+
+API SERVER          : FATHER
+ETCD                : MARRIAGE BROKER
+SCHEDULER           : BRIDE
+CONTROLLER          : MOTHER 
+
+KUBLET              : SIBBLINGS
+KUBE PROXY          : RELATIVES 
+POD                 : FUNCTION HALL
+
+
+CLUSTER TYPES:
+
+1. SELF MANAGED: WE NEED TO CREATE & MANAGE THEM
+
+minikube = single node cluster
+kubeadm = multi node cluster (manual)
+kops = multi-node cluster (automation)
+kind:
+k9s:
+kubespray:
+
+
+2. CLOUD-BASED: CLOUD PROVIDERS WILL MANAGE THEM
+
+AWS = EKS = ELASTIC KUBERNETES SERVICE
+AZURE = AKS = AZURE KUBERENETS SERVICE
+GOOGLE = GKS = GOOGLE KUBERENETS SERVICE
+
+
+
+MINIKUBE:
+It is a tool used to setup single node cluster on K8's. 
+Here Master and worker runs on same server.
+It contains API Servers, ETDC database and container runtime
+It is used for development, testing, and experimentation purposes on local. 
+It is a platform Independent.
+Installing Minikube is simple compared to other tools.
+
+NOTE: But we don't implement this in real-time Prod
+
+REQUIREMENTS:
+
+2 CPUs or more
+2GB of free memory
+20GB of free disk space
+Internet connection
+Container or virtual machine manager, such as: Docker.
+
+Kubectl is the command line tool for k8s
+if we want to execute commands we need to use kubectl.
+
+SETUP:
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install curl wget apt-transport-https -y
+sudo curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+sudo chmod +x /usr/local/bin/minikube
+sudo minikube version
+sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+sudo echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+sudo minikube start --driver=docker --force
+
+NOTE: When you download a command as binary file it need to be on /usr/local/bin 
+because all the commands in linux will be on /usr/local/bin 
+and need to give executable permission for that binary file to work as a  command.
+
+
+
+POD:
+It is a smallest unit of deployment in K8's.
+It is a group of containers.
+Pods are ephemeral (short living objects)
+Mostly we can use single container inside a pod but if we required, we can create multiple containers inside a same pod.
+when we create a pod, containers inside pods can share the same network namespace, and can share the same storage volumes .
+While creating pod, we must specify the image, along with any necessary configuration and resource limits.
+K8's cannot communicate with containers, they can communicate with only pods.
+ We can create this pod in two ways, 
+1. Imperative(command) 
+2. Declarative (Manifest file)
+
+
+IMPERATIVE:
+
+kubectl run pod1 --image vinodvanama/paytmmovies:latest     : for creting of the pod
+kubectl get pods/pod/po                                     : for listing of the pods
+kubectl get pod -o wide                                     : for listing the ip_address of the pods
+kubectl describe pod pod1                                   : for listing all the information of the pods
+kubectl delete pod pod1                                     : for deleting the specific pod
+kubectl delete pod -all                                     : for deleting the all Pods
+
+
+DECRALATIVE: by using file called manifest file
+
+MANDATORY FEILDS: without these feilds we cant create manifest
+
+apiVersion:
+kind:
+metadata:
+spec:
+
+
+vim pod.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+spec:
+  containers:
+    - image: vinodvanama/paytmtrain:latest
+      name: cont1
+
+execution: 
+kubectl create -f pod.yml
+kubectl get pods/pod/po
+kubectl get pod -o wide
+kubectl describe pod pod1
+kubectl delete -f raham.yml
+
+DRAWBACK: once pod is deleted we can't retrieve the pod.
