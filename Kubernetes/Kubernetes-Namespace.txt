@@ -1,0 +1,210 @@
+NAMESPACE: 
+
+It is used to divide the cluster to multiple teams on real time.
+Used for isolating groups of resources within cluster.
+By Default we work on Default Name space in K8's.
+We create NameSpaces when we work for Prod level Workloads.
+If we create pod on one namespace it cant be access by other namespaces.
+We can set access limits by RBAC and Limits of Cpu, RAM by Quotas.
+It is  applicable only for namespaced objects (e.g. Deployments, Services, etc.)
+It wont apply for cluster-wide objects (e.g. StorageClass, Nodes, PV).
+
+
+CLUSTER: HOUSE
+NAMESPACES: ROOM
+TEAM MATES: FAMILY MEM
+
+Each namespace is isolated.
+if your are room-1 are you able to see room-2.
+If dev team create a pod on dev ns testing team cant able to access it.
+we cant access the objects from one namespace to another namespace.
+
+
+TYPES:
+
+default           : Is the default namespace, all objects will create here only
+kube-node-lease   : it will store object which is taken from one node to another.
+kube-public	  : all the public objects will store here.      
+kube-system 	  : default k8s will create some objects, those are storing on this ns.
+
+NOTE: Every component of Kubernetes cluster is going to create in the form of pod
+And all these pods are going to store on kUBE-SYSTEM ns.
+
+kubectl get pod -n kube-system	: to list all pods in kube-system namespace
+kubectl get pod -n default	: to list all pods in default namespace
+kubectl get pod -n kube-public	: to list all pods in kube-public namespace
+kubectl get po -A		: to list all pods in all namespaces
+kubectl get po --all-namespaces
+
+kubectl create ns dev	: to create namespace
+kubectl config set-context --current --namespace=dev : to switch to the namespace
+kubectl config view : to see current namespace
+kubectl run dev1 --image nginx
+kubectl run dev2 --image nginx
+kubectl run dev3 --image nginx
+kubectl create ns test	: to create namespace
+kubectl config set-context --current --namespace=test : to switch to the namespace
+kubectl config view --minify | grep namespace : to see current namespace
+kubectl get po -n dev
+kubectl delete pod dev1 -n dev
+kubectl delete ns dev	: to delete namespace
+kubectl delete pod --all: to delete all pods
+
+NOTE: BY DEFAULT K8S NAMESPACE WILL PROVIDE ISOLATION BUT NOT RESTRICTION.
+TO RESTRICT THE USER TO ACCESS A NAMESPACE IN REAL TIME WE USE RBAC.
+WE CREATE USER, WE GIVE ROLES AND ATTACH ROLE.
+
+alias switch="kubectl config set-context --current"
+
+SERVICE: 
+Used to expose Pods to the users.
+If Front end Pod need to communicate with backend pod we use service for it.
+
+TYPES:
+CLUSTER-IP
+NODE PORT
+LOAD BALANCER
+
+COMPONENTS OF SERVICES:
+Selector: To select pods
+Port: Associated to Service
+TargetPort: Associated to Pod
+nodePort: Associated to Node
+Type: Type of the service
+
+
+TYPES:
+1. CLUSTERIP: It will work inside the cluster.
+it will not expose to outer world.
+Ideal for internal communication within a cluster.
+Suitable for backend services like databases, caches, or internal APIs 
+Preferred in Development and Testing Envs.
+Not accessible from outside the cluster.
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: movies
+  name: movies-deploy
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: movies
+  template:
+    metadata:
+      labels:
+        app: movies
+    spec:
+      containers:
+      - name: cont1
+        image: rahamshaik/moviespaytm:latest
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1
+spec:
+  type: ClusterIP
+  selector:
+    app: movies
+  ports:
+    - port: 80
+
+DRAWBACK:
+We cannot use app outside.
+
+2. NODEPORT: 
+
+Node Port Range= 30000 - 32767
+NodePort expose Pod on a static port on each node.
+if Port is not given it will assign automatically.
+if target Port is not Given it takes Port value.
+NodePort services are typically used for smaller applications with a lower traffic volume.
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: movies
+  name: movies-deploy
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: movies
+  template:
+    metadata:
+      labels:
+        app: movies
+    spec:
+      containers:
+      - name: cont1
+        image: rahamshaik/moviespaytm:latest
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1
+spec:
+  type: NodePort
+  selector:
+    app: movies
+  ports:
+    - port: 80
+      nodePort: 31111
+
+NOTE: UPDATE THE SG (REMOVE OLD TRAFFIC AND GIVE ALL TRAFFIC)
+DRAWBACK:
+EXPOSING PUBLIC-IP & PORT 
+PORT RESTRICTION.
+
+3. LOADBALACER: 
+In LoadBalaner we can expose application externally with the help of Cloud Provider LoadBalancer.
+it is used when an application needs to handle high traffic loads and requires automatic scaling and load balancing capabilities.
+After the LoadBalancer service is created, the cloud provider will created the Load Balancer.
+REPLACE  NodePort with LoadBalancer
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: swiggy
+  name: swiggy-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+      - name: cont1
+        image: rahamshaik/trainservice:latest
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abc
+spec:
+  type: LoadBalancer
+  selector:
+    app: swiggy
+  ports:
+    - port: 80
+
+
