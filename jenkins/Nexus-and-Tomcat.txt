@@ -1,0 +1,115 @@
+NEXUS:
+Its an Artifactory storage service.
+used to store artifacts on repo. (.JAR, .WAR, .EAR)
+Nexus server -- > Repo -- > Artifact
+we can use this server to rollback in real time.
+it req t2.medium 
+nexus uses java-1.8.0
+PORT: 8081
+
+ALTERTAVIVES: JFROG, S3, -----
+
+SETU SCIPT:
+https://github.com/RAHAMSHAIK007/all-setups.git
+
+STEPS: signin -- > username: admin & password: /app/sonatype-work/nexus3/admin.password -- > next -- > set password -- > disable anonymous access -- > save
+
+CREATING REPO:
+settings symbol -- > repositories -- > new -- > maven2(hosted) -- > name -- > save
+
+NOTE: to integrate any tool with Jenkins we need to download the plugin.
+
+NEXUS INTEGRATION TO PIPELINE:
+1. Download the plugin (Nexus Artifact Uploader)
+Manage Jenkins -- > plugins -- > Available Plugins -- > Nexus Artifact Uploader -- > install.
+2. Configure it to pipeline by using pipeline syntax
+
+NOTE: All the information will be available on pom.xml file.
+
+
+PIPELINE:
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+        stage('Artifact upload') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'NETFLIX', classifier: '', file: 'target/NETFLIX-1.2.2.war', type: '.war']], credentialsId: '968c23dd-b648-4f15-91bf-7d76981a1218', groupId: 'in.RAHAM', nexusUrl: '100.25.197.110:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'netflix', version: '1.2.2'
+            }
+        }
+    }
+}
+
+
+TOMCAT:-----------------------------------------------------------------------------------------
+
+WEBSITE: FRONTEND -- > DB IS OPT
+WEBAPP: FRONTEND + BACKEND -- > DB IS MANDATORY
+
+WEB APPLICATION SERVER/APPLICATION SERVER/APP SERVER = TOMCAT
+
+ITS A WEB APPLICATION SERVER USED TO DEPLOY JAVA APPLICATIONS.
+IT IS WRITTEN ON JAVA LANGUAGE.
+AGENT: JAVA
+PORT: 8080
+WE CAN DEPLOY OUR ARTIFACTS.
+ITS FREE AND OPENSOURCE.
+Its Platform Independent.
+YEAR: 1999 
+
+war : tomcat/webapps
+jar : tomcat/lib
+
+ALTERNATIVES: NGINX, IIS, WEBSPHERE, JBOSS, GLASSFISH
+
+
+SETUP: CREATE A NEW SERVER
+INSTALL JAVA: amazon-linux-extras install java-openjdk11 -y
+
+STEP-1: DOWNLOAD TOMCAT (dlcdn.apache.org)
+https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.96/bin/apache-tomcat-9.0.96.tar.gz
+
+
+STEP-2: EXTRACT THE FILES
+tar -zxvf apache-tomcat-9.0.96.tar.gz
+
+STEP-3: CONFIGURE USER, PASSWORD & ROLES
+vim apache-tomcat-9.0.96/conf/tomcat-users.xml
+
+ 56   <role rolename="manager-gui"/>
+ 57   <role rolename="manager-script"/>
+ 58   <user username="tomcat" password="raham123" roles="manager-gui, manager-script"/>
+
+STEP-4: DELETE LINE 21 AND 22
+vim apache-tomcat-9.0.96/webapps/manager/META-INF/context.xml
+
+STEP-5: STARTING TOMCAT
+sh apache-tomcat-9.0.96/bin/startup.sh
+
+CONNECTION:
+COPY PUBLIC IP:8080 
+manager apps -- > username: tomcat & password: raham123
+
+==============================================================================
+
