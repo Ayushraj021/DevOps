@@ -1,0 +1,147 @@
+CSI:
+CSI stands for container storage interface.
+It provides an interface for integrating storage systems with Kubernetes
+Before CSI, Kubernetes had a limited set of built-in storage options.
+CSI was Developed to Support Multiple Storage Options in K8s.
+After CSI any one can Write Drivers for Own Storage.
+What ever K8s instructed our Storage Drivers need to Do it.
+Below storage Solutions we can use for k8s from Cloud Services.
+
+VOLUMES IN K8S:
+1. EMPTYDIR: 
+Its a empty Volume and exists as long as the pod exists.
+Data in an emptyDir volume is lost when the pod is deleted.
+
+2. HostPath: 
+its  a volume type where data is store in particular path of node.
+If the pod is deleted, the volume will remain on the host.
+but data will store on single node only
+
+3. Persistent Volume & Persistent Volume Claim: 
+PV represents an actual storage resource in the cluster.
+PVC is a request for storage by a user or a pod.
+
+PV & PVC:
+PV its a cluster wide Group of volumes created by Admin.
+Users Can select volumes from the Group as per Requirements.
+If user want to use Volume he need to create Persistent Volume Claim.
+Once PVC is Created k8s will Bind PV based on request and Properties.
+To Bound Specific PVC to PV use Labels and Selector.
+Each PVC is Bound to only One PV, even if we have Additional storage. 
+If we create PVC and No PV is available so PVC will be on Pending state.
+
+RESTRICTIONS:
+1. Instances must be on same az as the ebs 
+2. EBS supports only a sinlge EC2 instance mounting
+
+pv.yml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore:
+    volumeID: vol-07e5c6c3fe273239f
+    fsType: ext4
+
+pvc.yml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+dep.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvdeploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: swiggy
+  template:
+    metadata:
+      labels:
+        app: swiggy
+    spec:
+      containers:
+      - name: raham
+        image: centos
+        command: ["/bin/bash", "-c", "sleep 10000"]
+        volumeMounts:
+        - name: my-pv
+          mountPath: "/tmp/persistent"
+      volumes:
+        - name: my-pv
+          persistentVolumeClaim:
+            claimName: my-pvc
+
+kubectl exec pvdeploy-86c99cf54d-d8rj4 -it -- /bin/bash
+cd /tmp/persistent/
+ls
+vim raham
+exit
+
+now delete the pod and new pod will created then in that pod you will see the same content.
+
+RECLAIM POLICY:
+Reclaim Policy determines what happens to a  PV once PVC Deleted.
+RETAIN: PV will Available, but not Reuseable by any PVC.
+RECYCLE: PV will be available But Data will be deleted.
+DELETE: PV will be Deleted Automatically.
+
+ACCESS MODES:
+RWO: single node mount the volume as read-write at a time.
+ROX: multiple nodes mount the volume as read-only simultaneously.
+RWX: multiple nodes mount the volume as read-write simultaneously.
+RWOP: volume to be mounted as read-write by a single pod.
+
+STORAGE CLASSES:
+In PV & PVC storage is Created and increased Manually. 
+Storage Classses will automatically Provisions the storage to Pods.
+This is Called as Dynamic Provisioning.\
+
+By using SC no need to Maintain PV.
+
+vim sc.yml
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+
+kubectl create -f sc.yml
+kubectl get sc
+
+METRIC SERVER:
+if we install metric server in k8s cluster it can collects metrics like cpu, ram -- from all the pods and nodes in cluster.
+we can use kubectl top po/no to see metrics
+previously we can called it as heapster.
+
+Metrics Server offers:
+
+    A single deployment that works on most clusters (see Requirements)
+    Fast autoscaling, collecting metrics every 15 seconds.
+    Resource efficiency, using 1 milli core of CPU and 2 MB of memory for each node in a cluster.
+    Scalable support up to 5,000 node clusters.
+
+
+You can use Metrics Server for:
+CPU/Memory based horizontal autoscaling (Horizontal Autoscaling)
+Automatically adjusting/suggesting resources needed by containers (Vertical Autoscaling)
