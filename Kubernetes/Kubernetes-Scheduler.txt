@@ -1,0 +1,125 @@
+SCHEDULER:
+Scheduler main work is to select the node to place the pod.
+while a pod is created it will select a node based on pod requirment.
+if scheduler cant find node then pod will be on pending state.
+Initially we can place a pod on node by writing node name on manifest.
+scheduler runs as a pod if it stop/delete scheduling wont happen.
+
+
+
+
+TAINTS & TOLERATIONS:
+By Default scheduler can place any pod on any Node.
+if we want to place Pod-1 on  Node-1 then we use Taints & Tolerations.
+First we taint the Node-01 so that no pod will be placed on any node.
+Then we can tolerate the Particular pod what we want to place on Node-01.
+We set Taint for Nodes & Tolerations for Pods.
+EX: Kubectl taint node01 app=swiggy:NoSchedule
+NOTE: it wont guarantee that  pod-1 definitely place on Node-01 all the time
+By Default k8s master is tainted thats why no pod is placed on master.
+To schedule pod on a master add - at end by running taint command.
+
+kubectl taint node i-04a90983debd1c8ec app=swiggy:NoSchedule
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: nginx
+      tolerations:
+        - key: "app"
+          operator: "Equal"
+          value: "swiggy"
+          effect: "NoSchedule"
+
+
+NODE SELECTOR:
+Kubernetes can select nodes to place pods based on the labels of a node.
+First we can label the node & later same labels we can add to pod manifest.
+Now all pods will be set on same node.
+NOTE: It can place pod on node with single label, But if we want to place pod on a node with multiple lables this wont work.
+kubectl label node node_id key=value
+
+kubectl label nodes node-1 hero=ayush
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: paytm
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+        - name: cont1
+          image: nginx
+      nodeSelector:
+        hero: "ayush"
+
+TO REMOVE LABEL: kubectl label node i-0b17bfc7885c1c9f3 hero=ayush --overwrite
+
+NODE AFFINITY:
+its a feature in Kubernetes that facilitates us to specify the rules for scheduling the pod based on the node labels. 
+we can use operators with multiple values too.
+OPERATORS: [In, NotIn, Exists, DoesNotExist, Gt, Lt]
+TYPES:
+requiredDuringSchedulingIgnoredDuringExecution:  While scheduling matching the label is mandatory, after placing pod optional.
+
+PreferredDuringSchedulingIgnoredDuringExecution: While scheduling matching the label is not mandatory, after placing pod optional.
+
+
+
+GIVE LABELS AND TRY THIS 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: paytm
+  template:
+    metadata:
+      labels:
+        app: paytm
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: hero
+                operator: In
+                values:
+                - rishabh
+                - ayush
