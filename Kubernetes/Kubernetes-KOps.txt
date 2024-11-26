@@ -57,6 +57,8 @@ Suggestions:
  * edit this cluster with: kops edit cluster rahams.k8s.local
  * edit your node instance group: kops edit ig --name=rahams.k8s.local nodes-us-east-1a
  * edit your master instance group: kops edit ig --name=rahams.k8s.local master-us-east-1a
+ * kops delete cluster --name ayush.k8s.local --yes: to delete the cluster. (Note: It will delete all the things like autoscailing group and all.)
+ 
 
 
 ADMIN ACTIVITIES:
