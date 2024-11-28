@@ -71,3 +71,7 @@ ADMIN ACTIVITIES:
 kops edit ig --name=rahams.k8s.local master-us-east-1a
 kops update cluster --name rahams.k8s.local --yes
 kops rolling-update cluster
+
+
+
+Manifest-file: It stores the code .yml file is known as manifest file.
