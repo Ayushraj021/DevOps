@@ -153,7 +153,8 @@ kubectl get pods/pod/po                                     : for listing of the
 kubectl get pod -o wide                                     : for listing the ip_address of the pods
 kubectl describe pod pod1                                   : for listing all the information of the pods
 kubectl delete pod pod1                                     : for deleting the specific pod
-kubectl delete pod -all                                     : for deleting the all Pods
+kubectl delete pod --all                                    : for deleting the all Pods
+kubectl get -A po                                           : for seeing the all the pods
 
 
 DECRALATIVE: by using file called manifest file
