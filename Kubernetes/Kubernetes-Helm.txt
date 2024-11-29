@@ -1,0 +1,139 @@
+HELM:
+
+In K8S Helm is a package manager to install packages
+in Redhat: yum & Ubuntu: apt & K8s: helm 
+
+it is used to install applications on clusters.
+we can install and deploy applications by using helm
+it manages k8s resources packages through charts 
+chart is collection of manifest files.
+chart is a collection of files organized on a directory structure.
+a running instance of a chart with a specific config is called a release.
+
+INSTALLATION OF HELM:
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+helm version
+
+
+INSTALLATION OF METRIC SERVER:
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/high-availability-1.21+.yaml
+
+
+INSTALL PROMETHEUS:
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+
+UPDATE HELM CHART REPOS:
+helm repo update
+helm repo list
+
+CREATE PROMETHEUS NAMESPACE:
+kubectl create namespace prometheus
+kubectl get ns
+
+INSTALL PROMETHEUS:
+helm install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2"
+kubectl get pods -n prometheus
+kubectl get all -n prometheus
+
+CREATE GRAFANA NAMESPACE:
+kubectl create namespace grafana
+
+INSTALL GRAFANA:
+helm install grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set persistence.enabled=true --set adminPassword='RahamDevOps' --set  service.type=LoadBalancer
+kubectl get pods -n grafana
+kubectl get service -n grafana
+
+Copy the EXTERNAL-IP and paste in browser
+
+Go to Grafana Dashboard → Add the Datasource → Select the Prometheus
+add the below url in Connection and save and test
+http://prometheus-server.prometheus.svc.cluster.local/
+
+
+Import Grafana dashboard from Grafana Labs
+grafana dashboard → new → Import → 6417 → load → select prometheus → import
+
+
+
+NOW DEPLOY ANY APPLICATION AND SEE THE RESULT IN DASHBOARD.
+
+
+ADD 315 PORT TO MONITOR THE FOLLOWING TERMS:
+Network I/O pressure.
+Cluster CPU usage.
+Cluster Memory usage.
+Cluster filesystem usage.
+Pods CPU usage.
+
+ADD 1860 PORT TO MONITOR NODES INDIVIDUALLY 
+
+11454 -- > for pv and pvcs
+747 -- > pod metrics
+14623 -- > k8s overview db
+
+
+Horizontal: New 
+Vertical: Existing
+
+
+
+In Kubernetes, a HorizontalPodAutoscaler automatically updates a workload resource (such as a Deployment or ReplicaSet), with the aim of automatically scaling the workload to match demand.
+
+Example : if you have pod-1 with 50% load and pod2 with 50% load then average will be (50+50/2=50) average value is 50
+but if pod-1 is exceeding 60% and pod-2 50% then average will be 55% (then here we need to create a pod-3 becaue its exceeding the average)
+
+Here we need to use metric server whose work is to collect the metrics (cpu & mem info)
+metrics server is connected to the HPA and give information to HPA 
+Now HPA will analysis metrics for every 30 sec and create a new pod if needed.
+
+
+COOLING PERIOD:
+
+
+scaling can be done only for scalable objects (ex: RS, Deployment, RC )
+HPA is implemented as a K8S API Resources and a controller.
+Controller Periodically adjust the number of replicas in RS, RC and Deployment depends on average.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies
+  labels:
+    app: movies
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: movies
+  template:
+    metadata:
+      labels:
+        app: movies
+    spec:
+      containers:
+        - name: cont1
+          image: yashuyadav6339/movies:latest
+
+
+kubectl apply -f hpa.yml
+kubectl get all
+kubectl get deploy 
+kubectl autoscale deployment movies --cpu-percent=20 --min=3 --max=10
+kubectl get hpa
+kubectl desribe hpa movies
+kubectl get al1
+
+open second termina and give
+kubectl get po --watch
+
+come to first terminal and go inside pod
+kubectl exec mydeploy-6bd88977d5-7s6t8 -it -- /bin/bash
+
+apt update -y
+apt install stress -y
+stress 
+
+check terminal two to see live pods
