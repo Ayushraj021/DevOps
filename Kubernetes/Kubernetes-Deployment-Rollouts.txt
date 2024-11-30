@@ -1,0 +1,90 @@
+Note: Take the code from the official document for this file.
+(https://kubernetes.io/docs/home/)
+            OR
+      (Kubernetes.io)
+
+        
+
+DEPLOYMENT ROLLOUTS:
+When we create a deployment a revision-1 is created.
+When we update a deployment a revision-2 is created.
+BY DEFUALT K8S WILL FOLLOW ROLLING-UPDATE STRATEGY.
+when we want to rollback to previous version of application we can use
+
+COMMANDS:
+kubectl rollout history deploy/movies
+kubectl rollout undo deploy/movies
+kubectl rollout status deploy/movies
+kubectl rollout pause deploy/movies
+kubectl rollout resume deploy/movies
+
+ENV VARS:
+In k8s we can set env vars using evn feild.
+env is array means we can set multiple values.
+it has key-value fromat.
+to set env vars we use configmaps and secrets.
+
+
+CONFIG MAPS:
+it is used to pass  configuration data to pods in key-value fromat.
+we pod is created inject configmap, so data is used as env varibles.
+First create configmap and later inject to pod.
+But the data should be non confidential data ()
+But it does not provider security and encryption.
+Limit of config map data in only 1 MB (for more data use volumes).
+To pass values from cli use literal.
+
+COMMAND:
+kubectl create cm raham --from-literal=password=raham123 [FROM CLI]
+kubectl create cm raham --from-file=password=raham123 [FROM FILE]
+kubectl get cm
+kubectl describe cm raham
+
+
+
+
+SECERETS:
+Used to store sensitive information like passwords, keys ---
+it wont encrypt data but it will encode them in base64.
+when pod is created inject Secret.
+Dont push to github becuse they are not encrypted but encode.
+it wont encrypt in etcd also.
+Data feild indicates number of secrets in secret.
+USE BELOW COMMAND TO ENCODE: echo -n "raham123" | base64
+SE BELOW COMMAND TO DECODE: echo -n "raham123" | base64 -d
+
+COMMAND:
+kubectl create secret generic raham --from-literal=password=raham123
+kubectl create secret generic raham --from-file=password=raham123
+kubectl get secret raham -o yaml
+kubectl describe secret raham
+
+
+
+NOTE:
+Dont push to github becuse they are not encrypted but encode.
+it wont encrypt in etcd also.
+Enable Encryption at Rest for Secrets so they stored as encrypted in ETCD
+secret is not written to disk storage, Kubelet stores them to tmpfs.
+Once the Pod that depends on the secret is deleted, kubelet will delete its local copy of the secret data as well.
+
+
+MULTI-CONTAINER POD:
+It will have more than one container in a pod.
+each container have different purpose to work on.
+They created and destroyed together and share same n/w and volume.
+If any of them fails, the POD restarts.
+
+
+SIDE CAR:
+It creates a helper container to main container.
+main container will have the app and helper container Helps main container.
+
+Adapter Design Pattern:
+enable communication and coordination between containers.
+
+Ambassador Design Pattern:
+used to connect containers with the outside world
+
+Init Container:
+it initialize the first work and exits later.
