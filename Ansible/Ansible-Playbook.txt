@@ -1,0 +1,172 @@
+3. PLAYBOOKS:
+playbooks used to execute multiple modules.
+we can reuse the playbook multiple times.
+in real time we use a playbook to automate our work.
+for deployment, pkg installation, Server Creation ----
+here we use key-value pairs.
+Key-Value can also be called as Dictionary.
+ansible-playbook will be written on YAML syntax.
+YAML = YET ANOTHER MARKUP LANGUAGE
+extension for playbook is .yml or .yaml
+playbook start with --- and end with ... (opt)
+
+
+EX-1:
+
+- hosts: all
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+
+    - name: installing httpd
+      yum: name=httpd state=present
+
+    - name: starting httpd
+      service: name=httpd state=started
+
+    - name: create user
+      user: name=jayanth state=present
+
+    - name: copy a file
+      copy: src=index.html dest=/root
+
+   
+
+TO EXECUTE: ansible-playbook playbok.yml
+
+Gather facts: it will get information of worker nodes
+its by default task performed by ansible.
+
+ok=total number of tasks
+changed= no.of tasks successfully executed
+
+EX-2:
+ hosts: all
+  ignore_errors: true
+  tasks:
+    - name: installing git
+      yum: name=git state=absent
+
+    - name: installing httpd
+      yum: name=httpd state=absent
+
+    - name: starting httpd
+      service: name=httpd state=started
+
+    - name: create users
+      user: name=pushpa state=absent
+
+    - name: copying a file
+      copy: src=raham.txt dest=/root
+
+
+TAGS: by default ansible will execute all tasks sequentially in a playbook.
+we can use tags to execute a specific tasks or to skip a specific tasks.
+
+
+EX-1:
+
+- hosts: all
+  ignore_errors: yes
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+      tags: a
+
+    - name: installing httpd
+      yum: name=httpd state=present
+      tags: b
+
+    - name: starting httpd
+      service: name=httpd state=started
+      tags: c
+
+    - name: create a user
+      user: name=kohli state=present
+      tags: d
+
+    - name: copy a file
+      copy: src=index.html dest=/tmp
+      tags: e
+
+SINGLE TAG: ansible-playbook raham.yml --tags d
+MULTI TAGS: ansible-playbook raham.yml --tags b,c
+
+EX-2:
+
+- hosts: all
+  ignore_errors: yes
+  tasks:
+    - name: uninstalling git
+      yum: name=git* state=absent
+      tags: a
+
+    - name: uninstalling httpd
+      yum: name=httpd state=absent
+      tags: b
+
+    - name: starting httpd
+      service: name=httpd state=started
+      tags: c
+
+    - name: delete a user
+      user: name=kohli state=absent
+      tags: d
+
+    - name: copy a file
+      copy: src=index.html dest=/tmp
+      tags: e
+
+SKIP A SINGLE TASK: ansible-playbook raham.yml --skip-tags c
+SKIP MULTIPLE TASK: ansible-playbook raham.yml --skip-tags a,c
+
+
+==========================================================
+
+HANDLERS:
+when we have two tasks in a single playbook if task 2 is depending upon task 1 so then we can use the concept called handlers .
+once task one is executed successfully it will notify task 2 to perform the operation.
+the name of the notify and the name of the task two must be same.
+
+
+- hosts: all
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+      notify: starting httpd
+  handlers:
+    - name: starting httpd
+      service: name=httpd state=started
+
+sed -i 's/present/absent/g' raham.yml
+
+- hosts: all
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=absent
+      notify: starting httpd
+  handlers:
+    - name: starting httpd
+      service: name=httpd state=started
+
+SETUP MODULE: used to print the complete info of worker nodes
+ansible all -m setup
+
+ansible all -m setup  | grep -i family
+ansible all -m setup  | grep -i pkg
+ansible all -m setup  | grep -i cpus
+ansible all -m setup  | grep -i mem
+
+
+
+
+How to disconnect the worker node from the ansible node?
+ANS: in .ssh/ the workers information is going to stored. we have to remove the ip address of the worker node for disconnection of the worker node from the ansible server. 
+
+
+
+
+---------------------------------------------------------------------
+NOTE: 
+sed -i 's/abesent/present/g' file_name: it is going to replace the word absent to present where present in the file. file_name = we need to provide the file_name in whcih we wanted to make changes.
+----------------------------------------------------------------------
