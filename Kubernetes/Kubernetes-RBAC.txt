@@ -1,0 +1,210 @@
+RBAC:
+
+role : set of permissions for one ns
+role binding: adding users to role
+these will work on single namespace
+
+cluster role: set of permissions for entire ns
+cluster role binding: adding users to cluster role
+these will work on all namespaces
+
+
+when we run kubectl get po k8s api server will authenticate and check authorization
+authentication: permission to login
+authorization: permission to work on resources
+
+To authenticate API requests, k8s uses the following options:
+client certificates,
+bearer tokens,
+authenticating proxy,
+or HTTP basic auth.
+
+Kubernetes doesn’t have an API for creating users.
+Though, it can authenticate and authorize users.
+
+We will choose the client certificates as it is the simplest among the four options.
+
+why certs needed on k8s: for authentication purpose.
+certs will have users & keys for login.
+
+NOTE:
+Before all the below steps first run the minkube-ubutnu.sh script for installation of minikube in your server. Then you can do anything.
+
+1. Create a client certificate
+We’ll be creating a key and certificate sign request (CSR) needed to create the certificate. Let’s create a directory where to save the certificates. I’ll call it cert:
+
+mkdir dev1 && cd dev1
+
+1. Generate a key using OpenSSL:
+openssl genrsa -out dev1.key 2048
+
+2. Generate a Client Sign Request (CSR) :
+
+openssl req -new -key dev1.key -out dev1.csr -subj "/CN=dev1/O=group1"
+ls ~/.minikube/
+
+3. Generate the certificate (CRT):
+
+openssl x509 -req -in dev1.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out dev1.crt -days 500
+
+Now, that we have the .key and the .crt, we can create a user.
+
+
+
+Create a user
+1. Set a user entry in kubeconfig
+kubectl config set-credentials dev1 --client-certificate=dev1.crt --client-key=dev1.key
+
+2.Set a context entry in kubeconfig
+kubectl config set-context dev1-context --cluster=minikube --user=dev1
+kubectl config view
+
+3.Switching to the created user
+kubectl config use-context dev1-context
+$ kubectl config current-context # check the current context
+dev1-context
+But, now, dev1 doesn’t have any access privileges to the cluster. For that we’ll have access denied if we try to create any resource:
+
+$ kubectl create namespace ns-test
+kubectl et po
+Error from server (Forbidden): namespaces is forbidden: User "dev1" cannot create resource "namespaces" in API group "" at the cluster scope
+
+3. Grant access to the user
+To give access to manage k8s resources to dev1, we need to create a Role and a BindingRole.
+
+kubectl config use-context minikube
+kubectl create ns dev
+
+
+
+3.1. Create a Role
+
+Let’s create a Role object in role.yaml file. The Role will define which resources could be accessed and which operations/verbs could be used.
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: dev
+name: pod-reader
+rules:
+apiGroups: [""] # "" indicates the core API group
+resources: ["pods"]
+verbs: ["get", "watch", "list"]
+Resources: pod, deployments, namespace, secret, configmap, service, persistentvolume…
+
+Verbs: get, list, watch, create, delete, update, edit, exec.
+
+3.2. Create a BindingRole
+
+We want to match the dev1 to the role created above named : pod-reader. To do that, we need to use RoleBinding.
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+name: read-pods
+namespace: dev
+subjects:
+kind: User
+name: dev1 # Name is case sensitive
+apiGroup: rbac.authorization.k8s.io
+roleRef:
+kind: Role #this must be Role or ClusterRole
+name: pod-reader # must match the name of the Role
+apiGroup: rbac.authorization.k8s.io
+Deploy both the role.yaml and role-binding.yaml to k8s, and don’t forget to use the context of minikube:
+
+kubectl config set-context --current --namespace=dev
+
+$ kubectl config use-context minikube
+Switched to context "minikube".
+$ kubectl apply -f role.yaml
+role.rbac.authorization.k8s.io/pod-reader created
+$ kubectl apply -f role-binding.yaml
+rolebinding.rbac.authorization.k8s.io/read-pods created
+We check that the Role and BindingRole was created successfully:
+
+$ kubectl get roles
+NAME AGE
+pod-reader 2m
+$ kubectl get rolebindings
+NAME AGE
+read-pods 2m
+
+We used Role to scope the rules to only one namespace, but we can also use ClusterRole to define more than one namespace. RoleBinding is used to bind to Role and ClusterRoleBinding is used to bind to ClusterRole.
+
+4. Testing the allowed operations for user
+Switch again to dev1 and try one of the non allowed operations like to create a namespace. This will fail, because dev1 is not allowed to do so.
+
+$ kubectl config use-context dev1-context
+$ kubectl create namespace ns-test
+$ kubectl get pods
+
+NOTE: TO GIVE PERMISSION FOR ROLE SWITCH TO MINIKUBE CONTEXT
+TO CHECK THE GIVEN PERMISSION FOR ROLE SWITCH TO dev1 CONTEXT
+
+
+
+EXAMPLES:
+EX-1:
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: default
+name: pod-reader
+rules:
+apiGroups: ["*"] # "" indicates the core API group
+resources: ["pods"]
+verbs: ["get", "watch", "list", "create", "delete"]
+
+EX-2:
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: default
+name: pod-reader
+rules:
+apiGroups: ["*"] # "" indicates the core API group
+resources: ["pods", "deployments"]
+verbs: ["get", "watch", "list", "create", "delete"]
+EX-3:
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: default
+name: pod-reader
+rules:
+apiGroups: ["*"] # "" indicates the core API group
+resources: ["pods", "deployments", "pods/log"]
+verbs: ["get", "watch", "list", "create", "delete"]
+
+ADMIN:
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+namespace: default
+name: admin
+rules:
+apiGroups: ["*"] # "" indicates the core API group
+resources: ["*"]
+verbs: ["*"]
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+name: adminbind
+namespace: default
+subjects:
+kind: User
+name: user2 # Name is case sensitive
+apiGroup: rbac.authorization.k8s.io
+roleRef:
+kind: Role #this must be Role or ClusterRole
+name: admin # must match the name of the Role
+apiGroup: rbac.authorization.k8s.io
+
+kubectl create deploy raham --image nginx
+kubectl create cm one --from-literal=app=paytm
+kubectl create ns test
+kubectl logs pod1
