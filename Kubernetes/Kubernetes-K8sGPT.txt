@@ -1,0 +1,14 @@
+K8SGPT:
+install kops cluster
+curl -LO https://github.com/k8sgpt-ai/k8sgpt/releases/download/v0.3.24/k8sgpt_amd64.rpm
+sudo rpm -ivh -i k8sgpt_amd64.rpm
+k8sgpt version
+k8sgpt auth add
+LOGIN TO OPENAI ACCOUNT -- > PROFILE -- > APIKEYS
+copy past the key u generate from openai chatgpt
+k8sgpt analyze
+k8sgpt analyze -o json
+k8sgpt analyze -o json | jq .
+k8sgpt analyze --explain --filter=Pod --namespace=default
+
+LINK: https://github.com/k8sgpt-ai/k8sgpt
