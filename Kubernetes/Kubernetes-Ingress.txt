@@ -1,0 +1,31 @@
+INGRESS:
+
+Ingress helps to expose the HTTP and HTTPS routes from outside of the cluster.
+Ingress supports
+Path-based  
+Host-based routing
+Ingress supports Load balancing and SSL termination.
+It redirects the incoming requests to the right services based on the Web URL or path in the address.
+Ingress provides the encryption feature and helps to balance the load of the applications.
+
+Ingress is used to manage the external traffic to the services within the cluster which provides features like host-based routing, path-based routing, SSL termination, and more. Where a Load balancer is used to manage the traffic but the load balancer does not provide the fine-grained access control like Ingress.
+
+Example:
+Suppose you have multiple Kubernetes services running on your cluster and each service serves a different application such as example.com/app1 and example.com/app2. With the help of Ingress, you can achieve this. However, the Load Balancer routes the traffic based on the ports and can't handle the URL-based routing.
+
+To install ingress, firstly we have to install nginx ingress controller:
+command: kubectl create -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.1/deploy/static/provider/cloud/deploy.yaml
+
+Once we install ingress controller, we have to deploy 2 applications:
+github url: https://github.com/mustafaprojectsindevops/kubernetes/tree/master/ingress
+We need to install git first and we need to clone the repo first. 
+ls--> go to cd Kubernetes folder--> ls --> cd ingresss--> ls. 
+kubectl apply -f .          : Because there are multiple manifest files so we need to run all the manifest files. 
+now get the dns name and open it on browser:
+kubectl get ing : for list out the ingress.
+After executing all the files, use kubectl get ing to get ingress. After 30 seconds it will provide one load balancer dns.
+
+access those applications using dns/nginx and dns/httpd. So the traffic will route into both the applications as per the routing.
+use domain_name/nginx 		: to get the nginx server.
+use domain_name/httpd		: to get the httpd server. 
+if not use anything 	    : it will give nginx server because it is mentioned in the deployment.yml file or manifest file.
