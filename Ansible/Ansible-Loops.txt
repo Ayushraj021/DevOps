@@ -1,0 +1,145 @@
+LOOPS: We can use loops to reduce the length of the code for the playbook
+
+- hosts: all
+  tasks:
+    - name: installing pkg-1
+      yum: name={{item}} state=present
+      with_items:
+        - git
+        - java-1.8.0-openjdk
+        - maven
+        - docker
+        - httpd
+
+
+ansible all -a "git -v"
+ansible all -a "java -v"
+ansible all -a "maven -v"
+ansible all -a "docker -v"
+ansible all -a "httpd -v"
+
+
+- hosts: all
+  tasks:
+    - name: installing pkg-1
+      yum: name={{item}} state=absent
+      with_items:
+        - git
+        - java-1.8.0-openjdk
+        - maven
+        - docker
+        - httpd
+
+ansible all -a "git -v"
+ansible all -a "java -v"
+ansible all -a "maven -v"
+ansible all -a "docker -v"
+ansible all -a "httpd -v"
+
+EX-2:
+
+- hosts: all
+  tasks:
+    - name: creating users
+      user: name={{item}} state=present
+      with_items:
+        - ravi
+        - shiva
+        - rajesh
+        - shivani
+        - luckyy
+
+
+- hosts: all
+  tasks:
+    - name: creating users
+      user: name={{item}} state=absent
+      with_items:
+        - ravi
+        - shiva
+        - rajesh
+        - shivani
+        - lucky
+
+
+DEBUG: to print the messages from a playbook.
+
+- hosts: all
+  tasks:
+    - name: printing a msg
+      debug:
+        msg: hai all welcome to my session
+
+ansible all -m setup
+
+NAME    : ansible_nodename
+FAMILY  : ansible_os_family
+PKG    : ansible_pkg_mgr
+CPU    : ansible_processor_cores
+MEM    : ansible_memtotal_mb
+FREE    : ansible_memfree_mb
+
+
+- hosts: all
+  tasks:
+    - name: print a msg
+      debug:
+        msg: "my node name is: {{ansible_nodename}}, the os is: {{ansible_os_family}}, the package manager is: {{ansible_pkg_mgr}}, total cpus is: {{ansible_processor_cores}}, the total ram: {{ansible_memtotal_mb}}, free ram is: {{ansible_memfree_mb}}"
+
+
+JINJA2 TEMPLATE: used to get the customized op, here its a text file which can extract the variables and these values will change as per time.
+
+INLINE MODULE: Used to change specific line in a files on worker node.
+
+
+FETCH: Used to fetch data in files from remote servers to local.
+Note: Create a file in worker nodes
+
+- hosts: all
+  tasks:
+    - name: fetching data
+      fetch: src=/root/raham.txt dest=/tmp/abc.txt
+
+
+LOOKUPS: this module used to get data from files, db and key values
+
+- hosts: dev
+  vars:
+    a: "{{lookup('file', '/root/creds.txt') }}"
+  tasks:
+    - debug:
+        msg: "hai my user name is {{a}}"
+
+cat creds.txt
+user=raham
+
+CREATING EC2 FROM PLAYBOOK:
+
+NOTE: If Ansible want to create an Ec2 instance in the cloud it need to have permission
+so to allocate the permission for our Ansible we can create IAM user
+
+IAM -- > create user -- > name: Ansible -- > next -- > Attach policies directly -- > ec2fullAccess -- > next -- > create user
+
+Ansible -- > Security Credentials -- > Create access key -- > CLI -- > checkbox -- > create access key --> download .csv file
+
+COME TO ANSIBLE SERVER:
+aws configure -- > giving ansible user permissions to server
+
+AWS Access Key ID [None]: xxxxxxxxxxxxx
+AWS Secret Access Key [None]: xxxxxxxxxxxx
+Default region name [None]: us-east-1
+Default output format [None]: table
+
+sudo yum install pip -y
+sudo pip install boto
+
+- hosts: localhost
+  tasks:
+    - name: creating ec2 instance
+      ec2:
+        region: "us-east-1"
+        count: 3
+        image: "ami-04ff98ccbfa41c9ad"
+        instance_type: "t2.micro"
+        instance_tags:
+          Name: "abc"
