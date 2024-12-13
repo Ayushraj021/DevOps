@@ -1,0 +1,44 @@
+BLOCK STORAGE TYPES
+1. EBS:
+• Persistence: If you stop/reboot then data will not be deleted.
+• If you terminate then it will be deleted.
+• N/w Attached Virtual Drive.
+• N/w attached is slow than physical attached.
+
+2. INSTANCE STORE BACKED EC2:
+• The virtual Hard Drive on the host is allocated to EC2 Instances.
+• It is limited to some instances. Limited to 10 GB Per Device..
+• Non-Persistence: If you stop/terminate data will be lost.
+
+What is EBS:
+• It is a external block storage that you can attach to EC2.
+• Ebs is a Network attached virtual Hard drive.
+• Multiple EBS Volumes can be attached to a single EC2.
+• We can attach a multiple Volume to EC2 once at a time.
+• up to 16 instances to share a single EBS volume.
+• EBS Volumes and Instances must be in the same AZ.
+• We can Copy EBS to multiple Regions to prevent Data loss.
+
+ADVANTAGES
+• Scalability
+• Backup
+• Encryption
+• Multi-Attach
+
+
+launch instance
+select the instance -->  storage --> select volume i'd 
+actions --> modify volume --> enter volume amount 
+modify
+
+
+attaching-of-new-volume-to-ec2server:-
+
+select the instance -->  storage --> select volume i'd 
+create volume --> size --> create volume
+click on new volume --> click attach volume --> select your server 
+device name --> select first one
+attach volume
+
+note:-
+your server and volume must be on same availability zone and don't forget to delete the volumes.

@@ -1,3 +1,7 @@
+ELASTIC BEANSTALK: It is used to run and manage the web-application
+
+In this elastic beanstalk, we dont need to create infrastructure because elastic beanstalk itself creates infra to deploy the application.
+
 1.  open ebs
 2.  create application --> application name: abc 
 Note: once we enter the application name automatically automatically Environment name will update in Environment name.

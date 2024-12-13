@@ -1,1 +1,9 @@
+CREDENTIAL REPORT: It lists all your IAM users in this account and the status of their various credentials.
+After a report is created, it is stored for up to four hours.
+
+
+MFA: MULTI FACTOR AUTHENTICATION
+THIS CAN BE APPLICABLE FOR ROOT USER & IAM USER ALSO.
+
+
 IAM -- > DASHBOARC -- > ADD MFA -- > DEVICENAME: ABC -- > AUTHENTICATOR APP -- > INSTALL APP -- > ENTER MFA CODES -- > NEXT

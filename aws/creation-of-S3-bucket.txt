@@ -1,3 +1,82 @@
+What is s3?
+
+•	Amazon 53 is a Simple Storage Service
+•	stores objects like files, Photos, Audio, Videos
+•	providing more scalability and security to.
+•	It allows the users to store and retrieve .
+•	Many companies use s3 to  store customers data.
+•	it has infinite scaling capacity.
+
+
+
+
+
+Advantages
+
+•	To store all types of Data
+•	Static web hosting
+•	Big Data Analytics
+•	Backup and Recovery
+•	Highly scalable & Flexible
+•	Low Cost
+ 
+How about Data Duration
+
+•	To store all types of Data
+•	Static web hosting
+•	Big Data Analytics
+•	Backup and Recovery
+•	Highly scalable & Flexible
+•	Low Cost
+
+
+
+
+
+
+ATRRIBUTES
+
+•	Key
+•	Version ID
+•	Value
+•	Metadata
+•	Access control information
+•	Tags
+ 
+
+HOW MUCH IS FREE
+•	There is a limit of 100 buckets per AWS account.
+•	But it can be increased if requested by AWS support.
+•	The maximum size of an AWS 53 bucket is 5TB.
+ 
+WAYS TO UPLOAD FILES
+
+•	GUI
+•	CLI
+•	API
+•	SDK
+ 
+WAYS TO UPLOAD FILES
+
+•	GUI
+•	CLI
+•	API
+•	SDK
+
+
+
+
+
+VERSION ING
+
+•	Versioning means Copy of a Object.
+•	If You delete a file we can retrive using Versioning.
+•	By default it will be disabled.
+•	Each file will have Different Version Id.
+•	You can always restore the previous version.
+
+
+
 Amazon S3 --> Buckets --> Create bucket --> Bucket name : it must be unique to all the region.
 ACLs disabled 
 Bucket Versioning --> Enable -------> We need to enable this beacuse if our object gets deleted we can able to access it.

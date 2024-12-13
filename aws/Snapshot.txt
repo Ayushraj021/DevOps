@@ -1,0 +1,44 @@
+What is SnapShot:
+• EBS Snapshots are copies of your EBS Volumes.
+• We can create up to 5000 EBS Volumes in a single account. We can create up to 10000 EBS snapshots in a single account.
+• Snapshots can be stored on S3 (not ours) but can only be accessed through EC2 API'S.
+• Snapshots will be Region Specific.
+• While taking snapshot we need to stop server.
+• If Data is added to server while taking snapshot it wont be written Once snapshot is created Copy it to other region.
+• We can restore snapshot even if we delete them.
+• we can store snapshots in Archive for saving up to 75%.
+
+PROCESS:
+1. create a server on server-a and Deploy the App
+2. create snapshot from server-a
+3. create ebs volume from snapshot
+4. stop server-b and remove existing volume
+5. add the ebs volume created from snapshot and start server
+
+EBS Snapshot Archive:
+• Move a Snapshot to Archive for 75% cheaper.
+• Takes within 24 to 72 hours for restoring the archive.
+• Recycle Bin for EBS Snapshots:
+• Setup rules to retain deleted snapshots so you can recover them after an accidental deletion
+• Specify retention (from 1 day to 1 year).
+• Fast Snapshot Restore (FSR):
+• Force full Initialization of snapshot to have no latency on the first use ($$$).
+
+
+1. create EC2
+2. create snapshot:
+   EC2 instance --> volumes --> i'd --> create snapshot 
+3. select snapshot --> actions --> copy snapshot --> select the region which you want to copy 
+4. copy snapshot
+5. open new region
+6. create volume from snapshot
+7. create instance from snapshot
+8. stop instance --> remove default volume --> attach your volume --> start instance --> open your public ip
+
+
+
+RESTORING SNAPSHOTS:
+RECYCLE BIN -- > RETENTION RULES -- > NAME: ABC -- > Resource type: EBS SNAPSHOTS -- > Apply to all resources -- > CREATE
+
+note:
+we can also do migratation with the use of AMI. And there are 6-7 ways of migratation of servers.

@@ -1,3 +1,8 @@
+HIGH AVAILABILTY: MAINTAINING MORE THAN ONE SERVER.
+WHY: IF SERVER-1 GOT DELETE, APP WILL BE SERVED FROM SERVER-2
+
+
+
 #! /bin/bash
 yum install httpd -y
 systemctl start httpd

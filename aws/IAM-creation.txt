@@ -1,3 +1,19 @@
+IAM: IDENTITY & ACCESS MANAGEMENT
+PURPOSE: TO PROVIDE ACCESS & PERMISSION TO THE AWS ACCOUNT.
+
+
+TYPES OF LOGIN:
+1. ROOT USER LOGIN : COMPLETE ACESS
+2. IAM USER LOGIN  : LIMITED ACCESS
+
+
+AUTHENTICATION : PERMISSION TO LOGIN
+AUTHORIZATION  : PERMISSION TO WORK
+
+NO ONE IS PERMITTED TO USE ROOT USER LOGIN IN AWS.
+
+1. USER: WHEN AN INDIVIDUAL USER WANT TO WORK WE CREATE IAM USER.
+
 -----------------------------------------------------IAM User(s) Creation:-------------------------------------------------------
 
 
@@ -11,12 +27,27 @@ USER -- > Attach policies directly -- > S3FULL ACESS, EC2 FULL ACESS -- > SAVE
 
 
 
+2. GROUPS: USED TO GIVE PERMISSION FOR MULTIPLE USERS
+GROUPS CANNOT BE NESTED.
+MAXIMUM A USER CAN BE PART OF 10 GROUPS.
+
 
 -----------------------------------------------------IAM User(s) Group Creation:-------------------------------------------------------
 IAM --> Create User(s) 
 IAM --> User groups --> Create group --> Name the group --> Add users to the group --> Attach permissions policies --> Create user group
 
 
+
+
+
+
+
+
+3. ROLES: TO GIVE PERMISSION TO A SERVICE.
+EX: IF EC2 WANT TO WORK WITH S3 OR ELB OR ASG WE NEED TO GIVE ROLE FOR IT.
+ROLES WILL NOT HAVE CREDENTIALS.
+WE CAN SEPICFY A ROLE WITH A LIMITED TIME.
+A SINGLE ROLE CAN BE USED BY MULTIPLE.
 
 -----------------------------------------------------Roles Creation:-------------------------------------------------------
 
@@ -30,3 +61,7 @@ SELECT SERVER -- > ACTIONS -- > SECURITY -- > MODIFY IAM ROLE -- > UPDATE
 
 
 aws s3 ls --> It is used to check the how many s3 is present in your server. This command will run when we connect our EC2 Instance.
+
+
+ACCESS ADVISORY: IT shows the services that this user can access and when those services were last accessed.
+Review this data to remove unused permissions.

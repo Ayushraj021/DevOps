@@ -1,3 +1,12 @@
+What is AMI:
+• An Amazon Machine Image (AMI) is an Template that provides the software that is required to set up and boot an Amazon EC2 Instance. Each AMI also contains a block device.
+• You must specify an AMI when you launch an instance.
+• The AMI must be compatible with the instance type.
+• We can create our own AMI or use Public AMI.
+• We can sell our AMI on AWS Market Place.
+
+
+
 AMI CRETION:PROCESS:
 1. DEPLOY APP TO SERVER
 2. SELECT SERVER -- > ACTIONS -- > IMAGES & TEMPLATES -- > CREATE IMAGE

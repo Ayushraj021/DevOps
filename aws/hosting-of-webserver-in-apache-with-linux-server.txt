@@ -1,3 +1,15 @@
+INTRO:
+• HTTPD IS AN WEB SERVER.
+•USED TO SERVE STATIC FILES(FRONT END CODE)
+• 29% OF WEBSITES ALL OVER THE WORLD.
+• APACHE WEB SERVER WAS PUBLISHED IN 1995.
+• FREE & OPEN SOURCE
+• FAST, LIGHTWEIGHT AND HIGH-PERFORMANCE
+• EASY TO INSTALL AND USE
+• PORT: 80
+    
+    
+    
     1.  create a server
     2.  sudo su
     3.  yum install httpd
@@ -5,7 +17,7 @@
     5.  systemctl status httpd
     6.  yum update
     7.  yum install git -y
-    8.  cd /var/www/html
+    8.  cd /var/www/html      --> path to put the frontend code.
     9.  ls
    10.  vim index.html
    11.  git clone https://github.com/devopsbyraham/bookmyshow.git
@@ -13,3 +25,13 @@
    13.  now open your public ip address.   
    14.  systemctl stop httpd
    15.  yum remove httpd -y
+
+   tail -f/var/log/httpd/access_log  --> access logs
+
+
+
+
+STATUS CODES:
+200 : A REQUEST WAS SUCCESSFUL
+403 : REQUEST TAKEN BUT REFUSES TO PROCESS
+404 : NOT FOUND

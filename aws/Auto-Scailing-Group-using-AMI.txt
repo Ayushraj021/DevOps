@@ -1,3 +1,20 @@
+AUTO SCALING GROUP:
+WHAT:
+Used to create servers automatically based on load.
+it has self healing property.[Automatically recreating]
+
+WHEN: when the requests are increasing then we can use it.
+ex: amazon big billion day sale, new movie release on OTT.
+
+HOW IT WORKS:
+1. Average CPU
+2. Requests per server
+3. Network (in & out)
+
+
+
+
+
 #! /bin/bash
 yum install httpd -y
 systemctl start httpd

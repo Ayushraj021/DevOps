@@ -1,3 +1,55 @@
+WHAT IS VPC ?
+
+ 	VPC: VIRTUAL PRIVATE CLOUD
+ 	ITS A PRIVATE NETWORK ON OUR AWS CLOUD.
+ 	IT PROVIDE PRIVACY, SECURITY AND ISLOATION TO OUR SERVERS.
+ 	SIMPLY WE CAN CREATE OUR OWN NETWORK AS PER OUR REUIRMENTS  	ITS COMPLETLY FREE
+ 
+WHY TO USE
+ 	Isolation and Security
+ 	Custom Network Design  	Resource Management  	Regional Expansion
+ 	On-Premises Integration
+ 	Data Transfer
+
+
+
+COMPONENTS
+
+ 	SUBNETS
+ 	INTERNET GATEWAY  	NAT GATEWAY
+ 	ROUTE TABLE  	NACL
+ 	ELASTIC IP
+ 	SECURITY GROUPS  	PEERING
+ 
+
+
+ 
+SUBNETS:
+To reduce traffic, the subnet will divide the big network into smaller, connected networks. Up to /16, 200 user-defined
+TYPES:
+1.	PUBLIC SUBNET : FOR USERS
+2.	PRIVATE SUBNET : FOR INTERNAL PURPOSE
+INTERNET GATEWAY:
+Connects your VPC to the internet.
+NAT GATEWAY:
+Connects your Private server to the internet indirectly.
+ROUTE TABLE:
+sends the traffic to your subnets
+ 
+PRIVATE IP RANGE
+
+ 	Class A : 10.0.0.0 to 10.255.255.255
+ 	Class B: 172.16.0.0 to 172.31.255.255
+ 	Class C : 192.168.0.0 to 192.168.255.255
+ 
+
+
+
+
+
+
+
+
 STEP-1: CREATE VPC
 VPC -- > CREATE VPC -- > NAME: SWIGGY -- > CIDR: 10.0.0.0/16 -- > CREATE
 

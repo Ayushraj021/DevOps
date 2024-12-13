@@ -1,3 +1,21 @@
+CLOUD WATCH - AWS
+
+CLOUD WATCH:
+• It is used for various purposes like MONITORING, ALARMS, DASHBOARDS, LOGS AND SCALING
+• It is used to monitor various AWS services.
+• It allows us to record metrics for aws services like EC2, EBS, ELB AND Amazon S3. We can setup alarms for our EC2 Instances
+
+
+
+PROJECT-1: CREATE ALARM FOR AN EC2-INSTANCE
+
+HOW IT WORKS:
+• Once we launch an instance if the CPU utilisation of instance is above 80% then alarm will be triggered
+• Once alarm is triggered you will get notiﬁed by SNS service
+
+
+
+
 1. Launch EC2 instance beacuse we are going to monitor upon EC2 only now.
 2. Open Cloud Watch.
 3. Alarms --> In alarm --> create alarm --> select metric --> EC2 --> Per-Instance metric --> search your ec2 by name and select the CPU utilization.
