@@ -1,0 +1,113 @@
+CONDITIONS:
+CLUSTER: Group of servers
+HOMOGENIUS: all servers have having same OS and flavour.
+HETROGENIUS: all servers have different OS and flavour.
+
+used to execute this module when we have different Clusters.
+
+RedHat=yum
+Ubuntu=apt
+
+- hosts: all
+  tasks:
+    - name: installing git on RedHat
+      yum: name=git state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: installing git on Debian
+      apt: name=git state=present
+      when: ansible_os_family == "Debian"
+
+
+- hosts: all
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+      when: ansible_nodename == "dev-1"
+
+    - name: installing mysql
+      yum: name=mysql state=present
+      when: ansible_nodename == "dev-2"
+
+    - name: installing python
+      yum: name=python state=present
+
+
+VALIDATORS:
+1. YAMLINT
+2. YAML FORMATTER
+3. YAML VALIDATOR
+4. CHATGPT
+
+SHELL VS COMMAND VS RAW:
+
+- hosts: all
+  tasks:
+    - name: installing maven
+      shell: yum install maven -y
+
+    - name: installing httpd
+      command: yum install httpd -y
+
+    - name: installing docker
+      raw: yum install docker -y
+
+raw >> command >> shell.
+
+ansible all -a "mvn -v"
+ansible all -a "htppd -v"
+ansible all -a "docker -v"
+
+
+L    : LINUX
+A    : APACHE
+M    : MYSQL
+P    : PYTHON
+
+
+- hosts: all
+  tasks:
+    - name: installing apache
+      yum: name=httpd state=present
+
+    - name: installing mysql
+      yum: name=mysql state=present
+
+    - name: installing python
+      yum: name=python3 state=present
+
+
+ ansible all -a "httpd --version"
+ ansible all -a "python3 --version"
+ ansible all -a "mysql --version"
+
+
+VARIABLES:
+
+STATIC VARS: we can define these vars inside the playbook and use for multiple times, once a variable is defined here it will not change untill we change.
+
+
+- hosts: all
+  vars:
+    a: maven
+    b: httpd
+  tasks:
+    - name: installing maven
+      yum: name={{a}} state=present
+    - name: installing httpd
+      yum: name={{b}} state=present
+
+TO EXECUTE: ansible-playbook playbbok.yml
+
+DYNAMIC VARS: therse vars will be defined outside the playbook and these will change as per our requirments.
+
+- hosts: all
+  vars:
+  tasks:
+    - name: installing maven
+      yum: name={{a}} state=absent
+    - name: installing httpd
+      yum: name={{b}} state=absent
+
+
+ansible-playbook raham.yml --extra-vars "a=docker b=httpd"z
