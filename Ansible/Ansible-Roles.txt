@@ -1,0 +1,140 @@
+ROLES:
+roles is a way of organizing playbooks in a structured format.
+main purpose of roles is to encapsulate the data.
+we can reuse the roles multiple times.
+length of the playbook is decreased.
+it contains on vars, templates, task -----
+in real time we use roles for our daily activities.
+yum install tree -y
+
+mkdir playbooks
+cd playbooks/
+
+mkdir -p roles/pkgs/tasks
+vim roles/pkgs/tasks/main.yml
+
+- name: installing pkgs
+  yum: name=git state=present
+- name: install maven
+  yum: name=maven state=present
+- name: installing docker
+  yum: name=docker state=present
+
+mkdir -p roles/users/tasks
+vim roles/users/tasks/main.yml
+
+- name: create users
+  user: name={{item}} state=present
+  with_items:
+    - uday
+    - naveen
+    - rohit
+    - lokesh
+    - saipallavi
+    - supriya
+
+mkdir -p roles/webserver/tasks
+vim roles/web/tasks/main.yml
+
+- name: installing httpd
+  yum: name=httpd state=present
+
+- name: starting httpd
+  service: name=httpd state=started
+
+cat master.yml
+
+- hosts: all
+  roles:
+    - pkgs
+    - users
+    - webserver
+
+find . -type f -exec sed -i 's/present/absent/g' {} \;
+
+
+ANSIBLE GALAXY:
+
+Ansible Galaxy is a  website where users can share roles and to a command-line tool for installing, creating, and managing roles.
+Ansible Galaxy gives greater visibility to one of Ansible's most exciting features, such as application installation or reusable roles for server configuration. 
+Lots of people share roles in the Ansible Galaxy.
+Ansible roles consist of many playbooks, which is a way to group multiple tasks into one container to do the automation in a very effective manner with clean, directory structures.
+
+ANSIBLE VAULT:
+it is used to encrypt the files, playbooks ----
+Technique: AES256 (USED BY FACEBOOK, AWS)
+vault will store our data very safely and securely.
+if we want to access any data which is in the vault we need to give a password.
+Note: we can restrict the users to access the playbook also.
+
+
+cat creds.txt
+user=raham
+passowrd=test123
+
+ansible-vault create creds1.txt		: to create a vault
+ansible-vault edit creds1.txt		: to edit a vault
+ansible-vault rekey creds1.txt		: to change password for a vault
+ansible-vault decrypt creds1.txt	: to decrypt the content	
+ansible-vault encrypt creds1.txt	: to encrypt the content	
+ansible-vault view creds1.txt		: to show the content without decrypt
+
+PIP: its a pkg manager used to install python libs/modules
+
+Redhat: yum
+ubuntu: apt
+python: pip
+
+- hosts: all
+  tasks:
+    - name: install pip
+      yum: name=pip state=present
+
+    - name: installing NumPy
+      pip: name=NumPy state=present
+
+    - name: installing Pandas
+      pip: name=Pandas state=present
+
+ASYNCHRONOUS & POLLING ACTIONS:
+for every task in  ansible we can set time limit
+if the task is not performed in that time limit ansible will stop playbook execution
+this is called as asynchronous and polling.
+
+- hosts: all
+  ignore_errors: yes
+  tasks:
+    - name: sleeping
+      command: sleep 30
+      async: 20
+      poll: 10
+
+    - name: install git
+      yum: name=git state=present
+
+
+async: time we set for task to complete
+poll: it will check if task is completed or not for every 10 sec
+
+WEB SERVER : TO SHOW THE APP : httpd  : 80  : /var/www/html
+frontend code
+APP SERVER : TO USE THE APP : Tomcat  : 8080  : tomcat/webapps
+frontend code + backend code
+
+
+- hosts: all
+  tasks:
+    - name: installing httpd
+      yum: name=httpd state=present
+
+    - name: starting httpd
+      service: name=httpd state=started
+
+    - name: installing git
+      yum: name=git state=present
+
+    - name: checkout
+      git:
+        repo: https://token@github.com/RAHAMSHAIK007/netflix-clone.git
+        dest: /var/www/html
+      tags: a
