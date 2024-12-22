@@ -1,0 +1,139 @@
+OS LEVEL OF VIRTUALIZATION:
+ability to take backup of complete os and reuse it.
+
+docker pull ubuntu
+docker run -it --name cont1 ubuntu
+apt update -y
+apt install mysql-server apache2 python3 -y
+touch file{1...5}
+apache2 -v
+mysql-server --version
+python3 --version
+ls
+
+ctrl p q
+
+docker commit cont1 raham:v1
+docker run -it --name cont2 raham:v1
+apache2 -v
+mysql-server --version
+python3 --version
+ls
+
+
+DOCKERFILE:
+it is an automation way to create image.
+here we use components to create image.
+in Dockerfile D must be Capiatl.
+Components also capital.
+To write our instructions we need to use components in Dockerfile
+This Dockerfile will be Reuseable.
+here we can create image directly without container help.
+Name: Dockerfile
+
+docker kill $(docker ps -qa)
+docker rm $(docker ps -qa)
+docker rmi -f $(docker images -qa)
+
+COMPONENTS:
+
+FROM		: used to base image
+RUN		    : used to run linux commands (During image creation)
+CMD		    : used to run linux commands (After container creation)
+ENTRYPOINT	: high priority than cmd
+COPY		: to copy local files to conatiner
+ADD		    : to copy internet files to conatiner
+WORKDIR		: to open req directory
+LABEL		: to add labels for docker images
+ENV		    : to set env variables (inside container)
+ARGS		: to pass env variables (outside containers)
+EXPOSE		: to give port number
+
+
+EX-1:
+FROM ubuntu
+RUN apt update
+RUN apt install apache2 mysql-server python3 -y
+RUN touch file{1..5}
+
+docker build -t raham:v1 .
+docker run -it --name cont1 raham:v1 
+
+EX-2:
+FROM ubuntu
+RUN apt update -y
+RUN apt install apache2 -y
+RUN apt install python3 -y
+CMD apt install mysql-server -y
+
+
+docker build -t raham:v2 .
+docker run -it --name cont2 raham:v2
+
+EX-3:
+FROM ubuntu
+COPY index.html /tmp
+ADD http://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz /tmp
+
+docker build -t raham:v3 .
+docker run -it --name cont3 raham:v3
+
+EX-4:
+
+FROM ubuntu
+COPY index.html /tmp
+ADD http://dlcdn.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz /tmp
+WORKDIR /tmp
+LABEL author rahamshaik
+
+docker build -t raham:v4 .
+docker run -it --name cont4 raham:v4
+
+
+EX-5:
+FROM ubuntu
+LABEL author rahamshaik
+ENV client swiggy
+ENV server appserver
+
+docker build -t raham:v5 .
+docker run -it --name cont5 raham:v5
+
+INDEX.HTML LINK: https://www.w3schools.com/howto/tryit.asp?
+filename=tryhow_css_form_icon
+
+NETFLIX-DEPLOYMENT:
+
+yum install git -y
+git clone https://github.com/RAHAMSHAIK007/netflix-clone.git
+now go to cd netflix-clone
+now create a Dockerfile
+
+ Dockerfile
+
+FROM ubuntu
+RUN apt update
+RUN apt install apache2 -y
+COPY * /var/www/html/
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+
+
+docker build -t netflix:v1 .
+docker run -it --name netflix1 -p 80:80 netflix:v1
+now open your public_ip_address with port 80
+
+MULTI-STAGE BUILD:
+With multi-stage builds, you use multiple FROM statements in your Dockerfile
+if we build image-1 from docker file and use that image-1 to build other image.
+
+Dockerfile  -- > image1
+
+Dockerfile
+FROM image1  -- > multi-stage build
+-----
+-------
+
+ADV:
+less time
+less work
+less complexity
