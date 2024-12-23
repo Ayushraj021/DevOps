@@ -1,0 +1,85 @@
+VOLUMES:
+It is used to store data inside container.
+volume is a simple directory inside container.
+containers uses host resources (cpu, ram, rom).
+single volume can be shared to multiple containers.
+ex: cont-1 (vol1)  --- > cont2 (vol1) & cont3 (vol1) & cont4 (vol1)
+at a time we can share single volume to single container only.
+every volume will store under /var/lib/docker/volumes
+
+METHOD-1:
+DOCKER FILE:
+
+FROM ubuntu
+VOLUME ["/volume1"]
+
+docker build -t raham:v1 .
+docker run -it --name cont1 raham:v1
+cd volume1/
+touch file{1..5}
+cat>file1
+ctrl p q
+
+docker run -it --name cont2 --volumes-from cont1  ubuntu
+cd /volume1
+ll
+touch file{6..10}
+ctrl pq
+
+docker attach cont1
+cd volume1
+ll
+
+docker run -it --name cont3 --volumes-from cont1 ubuntu
+
+METHOD-2:
+FROM CLI:
+
+docker run -it --name cont4 -v volume2 ubuntu
+cd volume2/
+touch java{1..5}
+ctrl p q
+
+docker run -it --name cont5 --volumes-from cont4  ubuntu
+cd volume2
+ll
+touch java{6..10}
+ctrl p q
+docker attach cont4
+ls
+
+
+
+METHOD-3: VOLUME MOUNTING
+
+docker volume ls 		: to list volumes
+docker volume create name	: to create volume
+docker volume inspect volume3	: to get info of volume3
+cd /var/lib/docker/volumes/volume3/_data 
+touch python{1..5}
+docker run -it --name cont5 --mount source=volume3,destination=/volue3 ubuntu
+docker volume rm 	: to delete volumes
+docker volume prune	: to delete unused volumes
+
+HOST -- > CONTAINER:
+
+cd /root
+touch raham{1..5}
+docker volume inspect volume4
+cp * /var/lib/docker/volumes/volume4/_data
+docker exec cont5 ls /volume4
+
+
+RESOURCE MANAGEMENT:
+By default, docker containers will not have any limits for the resources like cpu ram and memory so we need to restrict resource use for container.
+
+By default docker containers will use host resources(cpu, ram, rom)
+Resource limits of docker container should not exceed the docker host limits.
+
+docker stats  --> to check live cpu and memory
+
+docker run -it --name cont7 --cpus="0.1" --memory="300mb" ubuntu
+docker update cont7 --cpus="0.7" --memory="300mb"
+
+JENKINS SETUP BY DOCKER:
+docker run -it --name jenkins -p 8080:8080 jenkins/jenkins:lts
