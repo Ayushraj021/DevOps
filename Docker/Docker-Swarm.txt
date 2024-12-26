@@ -1,0 +1,102 @@
+High Avaliabilty: more than one server
+why: if one server got deleted then other server will gives the app
+
+DOCKER SWARM:
+its an orchestration tool for containers. 
+used to manage multiple containers on multiple servers.
+here we create a cluster (group of servers).
+in that cluster, we can create same container on multiple servers.
+here we have the manager node and worker node.
+manager node will create & distribute the container to worker nodes.
+worker node's main purpose is to maintain the container.
+without docker engine we cant create the cluster.
+Port: 2377
+worker node will join on cluster by using a token.
+manager node will give the token.
+
+SETUP:
+create 3 servers
+install docker and start the service
+hostnamectl set-hostname manager/worker-1/worker-2
+Enable 2377 port 
+
+docker swarm init (manager) -- > copy-paste the token to worker nodes
+docker node ls
+
+Note: individual containers are not going to replicate.
+if we create a service then only containers will be distributed.
+
+SERVICE: it's a way of exposing and managing multiple containers.
+in service we can create copy of conatiners.
+that container copies will be distributed to all the nodes.
+
+service -- > containers -- > distributed to nodes
+
+http://3.89.143.104:81/
+http://18.206.88.169:81/
+http://18.206.161.189:81/
+
+docker service create --name movies --replicas 3 -p 81:80 vijaykumar444p/movies:latest
+docker service ls		: to list services
+docker service inspect movies	: to get complete info of service
+docker service ps movies	: to list the containers of movies
+docker service scale movies=10	: to scale in the containers
+docker service scale movies=3	: to scale out the containers
+docker service rollback movies	: to go previous state
+docker service logs movies	: to see the logs
+docker service rm movies	: to delete the services.
+
+when scale in it follows lifo pattern.
+LIFO MEANS LAST-IN FIRST-OUT.
+
+Note: if we delete a container it will recreate automatically itself.
+it is called as self healing.
+
+
+CLUSTER ACTIVIES:
+docker swarm leave (worker)	: to make node inactive from cluster
+To activate the node copy the token.
+docker node rm node-id (manager): to delete worker node which is on down state
+docker node inspect node_id	: to get comple info of worker node
+docker swarm join-token manager	: to generate the token to join
+
+Note: we cant delete the node which is ready state
+if we want to join the node to cluster again we need to paste the token on worker node
+
+
+DOCKER NETWORKING:
+Docker networks are used to make communication between the multiple containers that are running on same or different docker hosts. 
+
+We have different types of docker networks.
+Bridge Network		: SAME HOST
+Overlay network		: DIFFERENT HOST
+Host Network
+None network
+
+BRIDGE NETWORK: It is a default network that container will communicate with each other within the same host.
+
+OVERLAY NETWORK: Used to communicate containers with each other across the multiple docker hosts.
+
+HOST NETWORK: When you Want your container IP and ec2 instance IP same then you use host network
+
+NONE NETWORK: When you don’t Want The container to get exposed to the world, we use none network. It will not provide any network to our container.
+
+
+To create a network: docker network create network_name
+To see the list: docker network ls
+To delete a network: docker network rm network_name
+To inspect: docker network inspect network_name
+To connect a container to the network: docker network connect network_name container_id/name
+docker exec -it cont1  /bin/bash
+apt update
+apt install iputils-ping -y : command to install ping checks
+ping ip-address of cont2
+crtl pq
+
+To disconnect from the container: docker network disconnect network_name container_name
+To prune: docker network prune
+
+DATABASE SETUP:
+docker run -itd --name dbcont -e MYSQL_ROOT_PASSWORD=raham123 mysql:9.0.1
+docker exec -it dbcont /bin/bash
+mysql -u root -p
