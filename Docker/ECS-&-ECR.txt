@@ -1,0 +1,122 @@
+ECS & ECR:
+
+ECS:
+
+Amazon Elastic Container Service (Amazon ECS) is a highly scalable and fast container management service. 
+Used to create, run, stop, and manage containers on a cluster. 
+ECS doesn’t have any server and compute power (CPU & Ram).
+Can be able to do roll back.
+With Amazon ECS, your containers are defined in a task definition that you use to run an individual task or task within a service.
+Deploy & load balance application across multiple servers.
+It will do auto scaling to handle the large traffic.
+You can run your tasks and services on a serverless infrastructure that's managed by AWS Fargate. 
+Alternatively, for more control over your infrastructure, you can run your tasks and services on a cluster of Amazon EC2 instances that you manage.
+
+
+DOCKER-COMPOSE VS ECS:
+When we use the docker-compose file to deploy it contains all the configuration of containers.
+For example if we have 3 servers we cannot deploy to all the containers at the same time, and if you do the same deployment on all three servers individually it cannot able to know all the 3 servers are manging the same application which is major disadvantage.
+Docker compose cannot able to do automatic load balancing and Auto scaling.
+Instead of using K8S, Swarm, Apahe Mesos and NoMad we can use ECS which is alternative for those
+Apache Mesos is the opposite of virtualization because in virtualization one physical resource is divided into multiple virtual resources, while in Mesos multiple physical resources are clubbed into a single virtual resource.
+
+
+ECS LAUNCH TYPES
+WORKING WITH EC2:
+Here we are going to manage the infrastructure ie instances.
+We need to install ECS agent to communicate.
+Need to set Firewall.
+We need to make sure all the patches is done for recent updates.
+Finally you can manage the containers and configure it as per your requirments.
+
+WORKING WITH FARGET:
+It follow serverless Architecture.
+We don’t have EC2 instances so need not maintain them.
+It will create servers on demand.
+We will pay for what we use here.
+
+
+ECS TASKS:
+A task definition is required to run Docker containers in Amazon ECS. Simply it is the blue print for containers and how it is deployed.  It will contain
+The Docker image to use with each container in your task for Application.
+How much CPU and memory to use with each task or each container within a task
+The infrastructure that your tasks are hosted on
+The Docker networking mode to use for the containers in your task
+The logging configuration to use for your tasks
+Whether the task continues to run if the container finishes or fails
+The command that the container runs when it's started
+Any data volumes that are used with the containers in the task
+The IAM role that your tasks use
+
+ECS SERVICES:
+A service definition defines how to run your Amazon ECS service.
+It will ensure that certain tasks are running at all times.
+It will restart the containers that is crashed or exited.
+For example if you have an application we want 2 instances/containers tp run our application all time, we say this to service then it will create 2 instances/containers and start running our application.
+If any instance fail it will restart the task.
+LOAD BALANCERS:
+The main intention is to distribute the traffic here.
+If we have app is deployed we can assign the LB and route the traffic to resources.
+If we scale our instance the LB is here able to drive the traffic to newly created instance.
+
+
+
+HOSTING AN APPLICATION ON ECS:
+UPLOADING IMAGE TO ECR:
+Amazon Elastic Container Registry (ECR) is a fully managed container registry.
+Easy to store, manage, share, and deploy your container images and artifacts anywhere.
+It supports private repositories with resource-based permissions using AWS IAM. 
+Specified users or EC2 instances can access your container repositories and images. 
+You can use your preferred CLI to push, pull, and manage Docker images, Open Container Initiative (OCI) images, and OCI compatible artifacts.
+ECR -- > CREATE A REPO -- > VISIBILITY: PUBLIC -- > NAME: RAHAM -- > CREATE 
+aws configure -- > 
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 247004640985.dkr.ecr.us-east-1.amazonaws.com
+docker build -t raham .
+docker tag raham:latest 247004640985.dkr.ecr.us-east-1.amazonaws.com/raham:latest
+docker push 247004640985.dkr.ecr.us-east-1.amazonaws.com/raham:latest
+CREATE ECS CLUSTER
+ECS -- > APACHE -- > APP LOAD BALANCER -- > CLUSTER: NAME : RAHAM -- > CREATE
+
+
+SECOND WAY ECS FARGATE:
+ECS -- > CREATE CLUSTER -- > NAME: RAHAM -- > VPC & SUBNETS : DEFAULT & ALL -- > INFRA : AMAZOM EC2 -- > AMAZON LINUX2, T2.MICRO, MIN:1 & MAX:5 -- > SSH (OPTION) -- > CREATE
+TASK DEFINATION -- > CREATE A NEW TASK DEFINATION -- > TASK DEFINATION FAMILY: swiggy-dev-task-defination -- > NAME: Hello & URL: nginxdemos/hello -- > NEXT -- > NEXT -- > 
+DEPLOY -- > CREATE SERVICE -- > EXITING CLUSTER: RAHAM -- > SERVICE NAME: HELLOWORLD -- > 
+REPLICAS : 3 -- > SG : (ALL TRAFFIC) -- > LOAD BALANCER: APPLICATION -- > NEW -- > NAME : -- >
+TG NAME: RAHAM-TG -- > GRACE PEROID : 20
+
+
+
+STEPS: WORK ON MUMBAI REGION
+
+1. CREATE EC2 AND INSTALL GIT & DOCKER
+yum install git docker -y
+systemctl start docker
+systemctl status docker
+
+2. GET THE CODE AND CREATE A IMAGE
+git clone https://github.com/karishma1521success/swiggy-clone.git
+cd swiggy-clone
+
+vim Dockefile
+
+FROM ubuntu
+RUN apt update && apt install apache2 -y
+COPY * /var/www/html
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+
+docker build -t swiggy:v1 .
+
+3. CREATE A REPO ON ECR AND PUSH THEIMAGE
+
+ECR -- > CREATE -- > NAME: SWIGGY -- > SCAN IMAGE -- > CREATE REPO
+
+View push commands
+NOTE: USE ACCESS KEY AND SECRET KEYS FOR AUTHENTICATION
+
+
+4. CREATE A CLUSTER BY USING FARGETE.
+
+5. CREATE TASK DEFINATION.	
+
+6. CREATE SERVICE 
