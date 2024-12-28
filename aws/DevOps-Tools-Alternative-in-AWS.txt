@@ -1,0 +1,9 @@
+GitHub                -->   AWS Code Commit
+Maven                 -->   AWS Code Build
+Jenkins               -->   AWS Code Build
+Ansible               -->   ------not yet issued--------
+Docker                -->   ECS
+Docker Hub            -->   ECR
+Kubernetes            -->   EKS
+Terraform             -->   CFT
+Grafana & Prometheus  -->   Cloud Watch  
