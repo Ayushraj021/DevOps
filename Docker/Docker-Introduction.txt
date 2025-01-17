@@ -74,15 +74,15 @@ apt install apache2 -y
 service apache2 start
 service apache2 status
 
-docker p q		: to exit container
-docker ps -a		: to list all containers
+docker p q		        : to exit container
+docker ps -a	    	: to list all containers
 docker attach cont_name	: to go inside container
 docker stop cont_name	: to stop container
 docker start cont_name	: to start container
 docker pause cont_name	: to pause container
 docker unpause cont_name: to unpause container
 docker inspect cont_name: to get complete info of a container
-docker rm cont_name	: to delete a container
+docker rm cont_name	    : to delete a container
 
 STOP: will wait to finish all process running inside container
 KILL: wont wait to finish all process running inside container
