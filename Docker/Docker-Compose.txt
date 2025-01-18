@@ -76,19 +76,19 @@ services:
       - "84:80"
 
 COMMANDS:
-docker-compose up -d		: to create and start all containers
-docker-compose stop		: to stop all containers
-docker-compose start		: to start all containers
-docker-compose kill		: to kill all containers
-docker-compose rm		: to delete all containers
-docker-compose down		: to stop and delete all containers
-docker-compose pause		: to pause all containers
-docker-compose unpause		: to unpause all containers
-docker-compose ps -a		: to list the containers managed by compose file
-docker-compose images		: to list the images managed by compose file
-docker-compose logs		: to show logs of docker compose
-docker-compose top		: to show the process of compose containers
-docker-compose restart		: to restart all the compose containers
+docker-compose up -d		      : to create and start all containers
+docker-compose stop	          : to stop all containers
+docker-compose start          : to start all containers
+docker-compose kill	          : to kill all containers
+docker-compose rm		          : to delete all containers
+docker-compose down	          : to stop and delete all containers
+docker-compose pause          : to pause all containers
+docker-compose unpause	      : to unpause all containers
+docker-compose ps -a		      : to list the containers managed by compose file
+docker-compose images		      : to list the images managed by compose file
+docker-compose logs		        : to show logs of docker compose
+docker-compose top		        : to show the process of compose containers
+docker-compose restart		    : to restart all the compose containers
 docker-compose scale train=10	: to scale the service
 
 
