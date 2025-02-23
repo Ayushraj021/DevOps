@@ -1,7 +1,7 @@
-APPLICATION: Collection of services 
+APPLICATION     : Collection of services 
 
-MONOLITHIC: multiple services are deployed on single server with single database.
-MICRO SERVICES: multiple services are deployed on multiple servers with multiple database.
+MONOLITHIC      : multiple services are deployed on single server with single database.
+MICRO SERVICES  : multiple services are deployed on multiple servers with multiple database.
 
 BASED ON USERS AND APP COMPLEXITY WE NEED TO SELECT THE ARCHITECTURE.
 
@@ -40,14 +40,11 @@ VIRTUALIZATION:
 able to create resource with our hardware properties.
 
 ARCHITECTURE & COMPONENTS:
-client: it will interact with user
-user gives commands and it will be executed by docker client
-
-daemon: manages the docker components(images, containers, volumes)
-
-host: where we install docker (ex: linux, windows, macos)
-
-Registry: manages the images.
+Docker Image    : is an executable package of software that includes everything needed to run an application.
+client          : it will interact with user, user gives commands and it will be executed by docker client
+daemon          : manages the docker components(images, containers, volumes)
+host            : where we install docker (ex: linux, windows, macos)
+Registry        : manages the images.
 
 ARCHITECTURE OF DOCKER:
 yum install docker -y    #client
@@ -56,11 +53,11 @@ systemctl status docker
 
 
 COMMANDS:
-docker pull ubuntu	: pull ubuntu image
-docker images		: to see list of images
+docker pull ubuntu	               : pull ubuntu image
+docker images		               : to see list of images
 docker run -it --name cont1 ubuntu : to create a container
--it (interactive) - to go inside a container
-cat /etc/os-release	: to see os flavour
+-it (interactive)                  : to go inside a container
+cat /etc/os-release	               : to see os flavour
 
 
 apt update -y	: to update 
