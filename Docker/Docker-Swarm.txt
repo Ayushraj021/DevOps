@@ -37,14 +37,14 @@ http://18.206.88.169:81/
 http://18.206.161.189:81/
 
 docker service create --name movies --replicas 3 -p 81:80 vijaykumar444p/movies:latest
-docker service ls		: to list services
+docker service ls		        : to list services
 docker service inspect movies	: to get complete info of service
-docker service ps movies	: to list the containers of movies
+docker service ps movies	    : to list the containers of movies
 docker service scale movies=10	: to scale in the containers
 docker service scale movies=3	: to scale out the containers
 docker service rollback movies	: to go previous state
-docker service logs movies	: to see the logs
-docker service rm movies	: to delete the services.
+docker service logs movies	    : to see the logs
+docker service rm movies	    : to delete the services.
 
 when scale in it follows lifo pattern.
 LIFO MEANS LAST-IN FIRST-OUT.
@@ -100,3 +100,11 @@ DATABASE SETUP:
 docker run -itd --name dbcont -e MYSQL_ROOT_PASSWORD=raham123 mysql:9.0.1
 docker exec -it dbcont /bin/bash
 mysql -u root -p
+
+
+LIMITATIONS OF DOCKER SWARM:
+1. CANT DO AUTO-SCALING AUTOMATICALLY
+2. CANT DO LOAD BALANCING AUTOMATICALLY
+3. CANT HAVE DEFAULT DASHBOARD
+4. WE CANT PLACE CONATINER ON REQUITED SERVER.
+5. USED FOR EASY APPS. 
