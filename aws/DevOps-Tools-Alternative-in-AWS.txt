@@ -1,9 +1,12 @@
-GitHub                -->   AWS Code Commit
-Maven                 -->   AWS Code Build
-Jenkins               -->   AWS Code Build
-Ansible               -->   ------not yet issued--------
-Docker                -->   ECS
-Docker Hub            -->   ECR
-Kubernetes            -->   EKS
-Terraform             -->   CFT
-Grafana & Prometheus  -->   Cloud Watch  
+DevOps Tools                  Alternative Tools                     AWS Alternative Tools                     Azure Alternative Tools               GCP Alternative Tools
+
+
+GitHub                        -->  GitLab                            -->   AWS Code Commit                      -->
+Maven                         -->  Apache Ant                        -->   AWS Code Build                       -->
+Jenkins                       -->  GitLab                            -->   AWS Code Build                       -->
+Ansible                       -->  Terraform                         -->   ------not yet issued--------         -->
+Docker                        -->  Containerd                        -->   ECS                                  -->
+Docker Hub                    -->  GitHub Container Registry         -->   ECR                                  -->
+Kubernetes                    -->  Docker Swarm                      -->   EKS                                  -->
+Terraform                     -->  Pulumi                            -->   CFT                                  -->
+Grafana & Prometheus          -->  Datadog                           -->   Cloud Watch                          -->
