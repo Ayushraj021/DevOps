@@ -52,14 +52,14 @@ ls
 
 METHOD-3: VOLUME MOUNTING
 
-docker volume ls 		: to list volumes
-docker volume create name	: to create volume
+docker volume ls 		        : to list volumes
+docker volume create name	    : to create volume
 docker volume inspect volume3	: to get info of volume3
 cd /var/lib/docker/volumes/volume3/_data 
 touch python{1..5}
 docker run -it --name cont5 --mount source=volume3,destination=/volue3 ubuntu
-docker volume rm 	: to delete volumes
-docker volume prune	: to delete unused volumes
+docker volume rm 	            : to delete volumes
+docker volume prune	            : to delete unused volumes
 
 HOST -- > CONTAINER:
 
