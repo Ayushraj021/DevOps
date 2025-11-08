@@ -10,3 +10,8 @@ Docker Hub                    -->  GitHub Container Registry         -->   ECR  
 Kubernetes                    -->  Docker Swarm                      -->   EKS                                  -->
 Terraform                     -->  Pulumi                            -->   CFT                                  -->
 Grafana & Prometheus          -->  Datadog                           -->   Cloud Watch                          -->
+
+
+
+
+All People Should Try New Dominoz Pizza
